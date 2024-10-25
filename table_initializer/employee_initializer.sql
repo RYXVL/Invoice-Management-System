@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS Employee (
+    employee_user_name VARCHAR(16) NOT NULL,
+    employee_password VARCHAR(32) NOT NULL,
+    employee_id INT,
+    employee_first_name VARCHAR(32) NOT NULL,
+    employee_last_name VARCHAR(32),
+    employee_email VARCHAR(64) NOT NULL,
+    employee_phone_no CHAR(10) NOT NULL,
+    employee_hire_date DATE NOT NULL,
+    employee_street_name VARCHAR(128),
+    employee_street_no INT,
+    employee_city VARCHAR(32),
+    employee_state VARCHAR(16) NOT NULL,
+    employee_postal_code CHAR(5) NOT NULL,
+    employee_country VARCHAR(16) NOT NULL,
+    company_id INT,
+    is_admin BOOLEAN NOT NULL,
+    PRIMARY KEY (company_id, employee_id),
+    UNIQUE (company_id, employee_user_name),
+    FOREIGN KEY (company_id) REFERENCES Company(company_id)
+);
