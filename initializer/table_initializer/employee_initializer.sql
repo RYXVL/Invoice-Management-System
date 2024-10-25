@@ -17,5 +17,5 @@ CREATE TABLE IF NOT EXISTS Employee (
     is_admin BOOLEAN NOT NULL,
     PRIMARY KEY (company_id, employee_id),
     UNIQUE (company_id, employee_user_name),
-    FOREIGN KEY (company_id) REFERENCES Company(company_id)
+    FOREIGN KEY (company_id) REFERENCES Company(company_id) ON UPDATE CASCADE ON DELETE CASCADE
 );

@@ -1,4 +1,4 @@
-from sql_file_runner import SQLFileRunner
+from utils.sql_file_runner import SQLFileRunner
 
 class Initializer:
 

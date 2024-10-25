@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS Customer (
     company_id INT,
     PRIMARY KEY (company_id, customer_id),
     UNIQUE (company_id, customer_user_name),
-    FOREIGN KEY (company_id) REFERENCES Company(company_id)
+    FOREIGN KEY (company_id) REFERENCES Company(company_id) ON UPDATE CASCADE ON DELETE CASCADE
 );

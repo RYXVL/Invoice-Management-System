@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS Product (
     item_id INT NOT NULL,
     PRIMARY KEY (company_id, product_id),
     UNIQUE (company_id, item_id),
-    FOREIGN KEY (company_id) REFERENCES Company(company_id),
-    FOREIGN KEY (item_id) REFERENCES Product_Catalog(item_id)
+    FOREIGN KEY (company_id) REFERENCES Company(company_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES Product_Catalog(item_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
