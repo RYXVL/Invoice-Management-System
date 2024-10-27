@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button
+from ui.customer_signup_screen import CustomerSignupScreen
+from ui.customer_login_screen import CustomerLoginScreen
 
 class CustomerScreen:
     
@@ -8,18 +10,21 @@ class CustomerScreen:
         self.window = Toplevel(root)
         self.window.title("Customer Screen")
         self.window.geometry("400x300")
-        Label(self.window, text="Customer Screen", font=("times new roman", 24, "bold"), fg="black").pack(expand=True)
+        
+        Label(self.window, text="Customer Screen", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
 
-        Button(self.window, text="Signup", font=("times new roman", 14), command=self.signup_action).pack(pady=10)
-        Button(self.window, text="Login", font=("times new roman", 14), command=self.login_action).pack(pady=10)
+        Button(self.window, text="Signup", font=("times new roman", 14), command=self.open_signup).pack(pady=10)
+        Button(self.window, text="Login", font=("times new roman", 14), command=self.open_login).pack(pady=10)
         Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
 
     def go_back(self):
         self.window.destroy()
         self.home_screen.show()
     
-    def signup_action(self):
-        pass
+    def open_signup(self):
+        self.window.withdraw()
+        CustomerSignupScreen(self.window)
 
-    def login_action(self):
-        pass
+    def open_login(self):
+        self.window.withdraw()
+        CustomerLoginScreen(self.window)
