@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Frame, Button
-from ui.admin_start_screen import AdminScreen
-from ui.employee_start_screen import EmployeeScreen
-from ui.customer_start_screen import CustomerScreen
+from ui.admin.admin_start_screen import AdminScreen
+from ui.employee.employee_start_screen import EmployeeScreen
+from ui.customer.customer_start_screen import CustomerScreen
 
 class StartScreen:
     def __init__(self, root):
