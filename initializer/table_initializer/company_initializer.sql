@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Company (
-    company_id INT,
+    company_id INT AUTO_INCREMENT,
     company_name VARCHAR(64) NOT NULL,
     company_street_name VARCHAR(128),
     company_street_no INT,
