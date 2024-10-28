@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button
+from ui.admin.admin_menu import AdminMenu
 
 class AdminScreen:
 
@@ -30,3 +31,5 @@ class AdminScreen:
         password = self.password_entry.get()
         print(f"Username: {username}")
         print(f"Password: {password}")
+        self.window.withdraw()
+        AdminMenu(self.window)
