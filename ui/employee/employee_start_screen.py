@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button
+from ui.employee.employee_menu_screen import EmployeeMenu
 
 class EmployeeScreen:
     
@@ -30,3 +31,5 @@ class EmployeeScreen:
         password = self.password_entry.get()
         print(f"Username: {username}")
         print(f"Password: {password}")
+        self.window.withdraw()  # Hide the Employee Screen
+        EmployeeMenu(self)  # Pass the current EmployeeScreen instance to EmployeeMenu
