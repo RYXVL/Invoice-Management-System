@@ -5,8 +5,9 @@ from ui.employee.employee_start_screen import EmployeeScreen
 from ui.customer.customer_start_screen import CustomerScreen
 
 class StartScreen:
-    def __init__(self, root):
+    def __init__(self, root, cursor):
         self.root = root
+        self.cursor = cursor
         self.root.title("Invoice Management System")
         self.root.geometry("750x800")
 
@@ -27,12 +28,12 @@ class StartScreen:
 
     def open_admin_screen(self):
         self.hide()
-        AdminScreen(self.root, self)
+        AdminScreen(self.root, self, self.cursor)
 
     def open_employee_screen(self):
         self.hide()
-        EmployeeScreen(self.root, self)
+        EmployeeScreen(self.root, self, self.cursor)
 
     def open_customer_screen(self):
         self.hide()
-        CustomerScreen(self.root, self)
+        CustomerScreen(self.root, self, self.cursor)

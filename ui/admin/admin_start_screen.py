@@ -4,9 +4,10 @@ from ui.admin.admin_menu import AdminMenu
 
 class AdminScreen:
 
-    def __init__(self, root, home_screen):
+    def __init__(self, root, home_screen, cursor):
         self.home_screen = home_screen
         self.window = Toplevel(root)
+        self.cursor = cursor
         self.window.title("Admin Screen")
         self.window.geometry("400x300")
         Label(self.window, text="Admin Screen", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
@@ -32,4 +33,4 @@ class AdminScreen:
         print(f"Username: {username}")
         print(f"Password: {password}")
         self.window.withdraw()
-        AdminMenu(self.window)
+        AdminMenu(self.window, self.cursor)

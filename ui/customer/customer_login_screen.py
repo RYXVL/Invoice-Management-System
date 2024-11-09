@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import Toplevel, Label, Button
 
 class CustomerLoginScreen:
-    def __init__(self, customer_screen):
+    def __init__(self, customer_screen, cursor):
         self.customer_screen = customer_screen
         self.window = Toplevel()
+        self.cursor = cursor
         self.window.title("Customer Login")
         self.window.geometry("400x300")
         

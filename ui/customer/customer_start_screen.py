@@ -5,9 +5,10 @@ from ui.customer.customer_login_screen import CustomerLoginScreen
 
 class CustomerScreen:
     
-    def __init__(self, root, home_screen):
+    def __init__(self, root, home_screen, cursor):
         self.home_screen = home_screen
         self.window = Toplevel(root)
+        self.cursor = cursor
         self.window.title("Customer Screen")
         self.window.geometry("400x300")
         
@@ -23,8 +24,8 @@ class CustomerScreen:
     
     def open_signup(self):
         self.window.withdraw()
-        CustomerSignupScreen(self.window)
+        CustomerSignupScreen(self.window, self.cursor)
 
     def open_login(self):
         self.window.withdraw()
-        CustomerLoginScreen(self.window)
+        CustomerLoginScreen(self.window, self.cursor)

@@ -4,9 +4,10 @@ from ui.employee.employee_menu_screen import EmployeeMenu
 
 class EmployeeScreen:
     
-    def __init__(self, root, home_screen):
+    def __init__(self, root, home_screen, cursor):
         self.home_screen = home_screen
         self.window = Toplevel(root)
+        self.cursor = cursor
         self.window.title("Employee Screen")
         self.window.geometry("400x300")
         Label(self.window, text="Employee Screen", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
@@ -32,4 +33,4 @@ class EmployeeScreen:
         print(f"Username: {username}")
         print(f"Password: {password}")
         self.window.withdraw()  # Hide the Employee Screen
-        EmployeeMenu(self)  # Pass the current EmployeeScreen instance to EmployeeMenu
+        EmployeeMenu(self, self.cursor)  # Pass the current EmployeeScreen instance to EmployeeMenu

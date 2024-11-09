@@ -5,9 +5,10 @@ from ui.employee.employee_view_invoice_screen import ViewInvoice
 
 class EmployeeMenu:
     
-    def __init__(self, employee_screen):
+    def __init__(self, employee_screen, cursor):
         self.employee_screen = employee_screen  # Store the reference to the EmployeeScreen instance
         self.window = Toplevel()
+        self.cursor = cursor
         self.window.title("Employee Menu")
         self.window.geometry("400x300")
         
@@ -19,11 +20,11 @@ class EmployeeMenu:
 
     def open_generate_invoice(self):
         self.window.withdraw()  # Hide the Employee Menu
-        GenerateInvoice(self)  # Open the Generate Invoice screen
+        GenerateInvoice(self, self.cursor)  # Open the Generate Invoice screen
 
     def open_view_invoice(self):
         self.window.withdraw()  # Hide the Employee Menu
-        ViewInvoice(self)  # Open the View Invoice screen
+        ViewInvoice(self, self.cursor)  # Open the View Invoice screen
 
     def go_back(self):
         self.window.destroy()  # Close the Employee Menu
