@@ -10,3 +10,6 @@ class Initializer:
 
     def initialize_tables(self, file_path: str, connection_params: dict) -> None:
         self.sqlFileRunner.run_sql_file(file_path, connection_params)
+
+    def initialize_metadata(self, file_path: str, connection_params: dict) -> None:
+        self.sqlFileRunner.run_all_sql_statements(file_path, connection_params)
