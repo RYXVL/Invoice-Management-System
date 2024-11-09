@@ -28,4 +28,4 @@ class EmployeeMenu:
 
     def go_back(self):
         self.window.destroy()  # Close the Employee Menu
-        self.employee_screen.window.deiconify()  # Show the Employee Screen again
+        self.employee_screen.deiconify()  # Show the Employee Screen again
