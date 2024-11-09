@@ -9,6 +9,7 @@ class AddProduct:
     def __init__(self, root, cursor, go_back_func):
         self.root = Toplevel(root)
         self.cursor = cursor
+        self.prev_screen = root
         self.go_back_func = go_back_func
         self.root.title("Add Product")
 
@@ -85,7 +86,7 @@ class AddProduct:
 
     def go_back(self):
         self.root.destroy()
-        self.go_back_func()
+        self.prev_screen.deiconify()
 
 
 # Sample data
