@@ -14,7 +14,12 @@ VALUES
 ('admin2', 'password', 102, 'Alice', 'Smith', 'alice.smith@example.com', '5552345678', '2022-05-16', 'Oak Avenue', 45, 'Greendale', 'CA', '90210', 'USA', 2, TRUE),
 ('admin3', 'adminpass', 103, 'Bob', 'Johnson', 'bob.j@example.com', '5553456789', '2021-09-25', 'Elm Drive', 78, 'Westfield', 'TX', '73301', 'USA', 3, TRUE),
 ('admin4', 'secure123', 104, 'Catherine', 'Brown', 'catherine.b@example.com', '5554567890', '2020-11-30', 'Cedar Road', 101, 'Lakeside', 'FL', '32003', 'USA', 4, TRUE),
-('admin5', 'admin789', 105, 'David', 'Taylor', 'david.t@example.com', '5555678901', '2023-06-01', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5, TRUE);
+('admin5', 'admin789', 105, 'David', 'Taylor', 'david.t@example.com', '5555678901', '2023-06-01', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5, TRUE),
+('user1', 'userpass1', 106, 'Michael', 'Green', 'michael.green@example.com', '5556789012', '2023-03-15', 'Birch Street', 30, 'Sunnyvale', 'CA', '94086', 'USA', 1, FALSE),
+('user2', 'userpass2', 107, 'Laura', 'King', 'laura.king@example.com', '5557890123', '2022-07-22', 'Willow Avenue', 12, 'Mountain View', 'CA', '94043', 'USA', 2, FALSE),
+('user3', 'userpass3', 108, 'Daniel', 'Lee', 'daniel.lee@example.com', '5558901234', '2021-10-10', 'Spruce Road', 55, 'Palo Alto', 'CA', '94301', 'USA', 3, FALSE),
+('user4', 'userpass4', 109, 'Sarah', 'White', 'sarah.white@example.com', '5559012345', '2020-12-05', 'Fir Lane', 19, 'San Jose', 'CA', '95112', 'USA', 4, FALSE),
+('user5', 'userpass5', 110, 'James', 'Wilson', 'james.wilson@example.com', '5550123456', '2023-08-01', 'Ash Boulevard', 88, 'Santa Clara', 'CA', '95050', 'USA', 5, FALSE);
 
 INSERT IGNORE INTO Brand (brand_name) VALUES
 ('ErgoFurniture'),

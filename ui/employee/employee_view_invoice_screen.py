@@ -3,10 +3,12 @@ from tkinter import Toplevel, Label, Button
 
 class ViewInvoice:
     
-    def __init__(self, employee_menu, cursor):
+    def __init__(self, employee_menu, cursor, selected_company_id):
         self.employee_menu = employee_menu  # Store the reference to the EmployeeMenu instance
         self.window = Toplevel()
         self.cursor = cursor
+        self.selected_company_id = selected_company_id
+        print(f'ViewInvoice: {self.selected_company_id}')
         self.window.title("View Invoice")
         self.window.geometry("400x300")
         
