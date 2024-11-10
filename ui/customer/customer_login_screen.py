@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu
+from ui.customer.customer_main_screen import CustomerMainScreen
 
 class CustomerLoginScreen:
     def __init__(self, customer_screen, cursor):
@@ -41,13 +42,13 @@ class CustomerLoginScreen:
             self.company_var.set(companies[0])  # Set default selection
         return companies
 
-    def login_action(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-        selected_company = self.company_var.get()
-        print(f"Login Username: {username}")
-        print(f"Login Password: {password}")
-        print(f"Selected Company: {selected_company}")
+    # def login_action(self):
+    #     username = self.username_entry.get()
+    #     password = self.password_entry.get()
+    #     selected_company = self.company_var.get()
+    #     print(f"Login Username: {username}")
+    #     print(f"Login Password: {password}")
+    #     print(f"Selected Company: {selected_company}")
     
     def login_action(self):
         username = self.username_entry.get()
@@ -64,6 +65,8 @@ class CustomerLoginScreen:
         print(f"Username: {username}")
         print(f"Password: {password}")
         print(f"Selected Company: {selected_company}")
+        self.window.withdraw()
+        CustomerMainScreen(self.window, self)
 
     def go_back(self):
         self.window.destroy()

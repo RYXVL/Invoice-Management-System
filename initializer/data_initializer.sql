@@ -59,3 +59,11 @@ INSERT IGNORE INTO Product_Catalog (item_name, item_description, brand_id) VALUE
 ('Vacuum Bot', 'Automatic vacuum cleaner with smart navigation and WiFi control.', 6),
 ('Electric Toothbrush', 'Rechargeable electric toothbrush with multiple brushing modes.', 5),
 ('Cordless Drill', 'Portable cordless drill with variable speed and battery indicator.', 8);
+
+INSERT IGNORE INTO Customer (customer_user_name, customer_password, customer_id, customer_first_name, customer_last_name, customer_email, customer_phone_no, customer_street_name, customer_street_no, customer_city, customer_state, customer_postal_code, customer_country, company_id)
+VALUES 
+('cust1', 'custpass1', 201, 'Emma', 'Johnson', 'emma.johnson@example.com', '5551234567', 'Maple Street', 22, 'Riverdale', 'NY', '10001', 'USA', 1),
+('cust2', 'custpass2', 202, 'Oliver', 'Williams', 'oliver.williams@example.com', '5552345678', 'Oak Avenue', 45, 'Greendale', 'CA', '90210', 'USA', 2),
+('cust3', 'custpass3', 203, 'Sophia', 'Martinez', 'sophia.martinez@example.com', '5553456789', 'Elm Drive', 78, 'Westfield', 'TX', '73301', 'USA', 3),
+('cust4', 'custpass4', 204, 'Liam', 'Brown', 'liam.brown@example.com', '5554567890', 'Cedar Road', 101, 'Lakeside', 'FL', '32003', 'USA', 4),
+('cust5', 'custpass5', 205, 'Mia', 'Davis', 'mia.davis@example.com', '5555678901', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5);
