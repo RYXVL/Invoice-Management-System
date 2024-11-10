@@ -11,7 +11,9 @@ from ui.admin.admin_update_employee_screen import UpdateEmployee
 
 class AdminMenu:
 
-    def __init__(self, admin_screen, cursor):
+    def __init__(self, admin_screen, cursor, selected_company_id):
+        self.selected_company_id = selected_company_id
+        print(self.selected_company_id)
         self.admin_screen = admin_screen
         self.window = Toplevel()
         self.cursor = cursor
