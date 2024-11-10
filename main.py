@@ -39,7 +39,7 @@ connection = connect(**connection_params_tables)
 cursor = connection.cursor()    
 
 root = tk.Tk()
-app = StartScreen(root, cursor)
+app = StartScreen(root, cursor, connection)
 root.mainloop()
 
 cursor.close()
