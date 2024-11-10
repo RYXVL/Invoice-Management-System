@@ -41,32 +41,32 @@ class AdminMenu:
     # Functions to open each screen and pass cursor
     def open_add_product(self):
         self.window.withdraw()
-        AddProduct(self.window, self.cursor, self.go_back)
+        AddProduct(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_delete_product(self):
         self.window.withdraw()
-        DeleteProduct(self.window, self.cursor, self.go_back)
+        DeleteProduct(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_add_employee(self):
         self.window.withdraw()
-        AddEmployee(self.window, self.cursor, self.go_back)
+        AddEmployee(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_delete_employee(self):
         self.window.withdraw()
-        DeleteEmployee(self.window, self.cursor, self.go_back)
+        DeleteEmployee(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_delete_customer(self):
         self.window.withdraw()
-        DeleteCustomer(self.window, self.cursor, self.go_back)
+        DeleteCustomer(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_update_company(self):
         self.window.withdraw()
-        UpdateCompany(self.window, self.cursor, self.go_back)
+        UpdateCompany(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_update_customer(self):
         self.window.withdraw()
-        UpdateCustomer(self.window, self.cursor, self.go_back)
+        UpdateCustomer(self.window, self.cursor, self.go_back, self.selected_company_id)
 
     def open_update_employee(self):
         self.window.withdraw()
-        UpdateEmployee(self.window, self.cursor, self.go_back)
+        UpdateEmployee(self.window, self.cursor, self.go_back, self.selected_company_id)

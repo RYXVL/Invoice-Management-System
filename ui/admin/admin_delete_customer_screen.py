@@ -36,10 +36,12 @@ from tkinter import ttk, Toplevel, Label, Button
 
 class DeleteCustomer:
 
-    def __init__(self, root, cursor, go_back_func):
+    def __init__(self, root, cursor, go_back_func, selected_company_id):
         self.root = Toplevel(root)
         self.prev_screen = root
         self.cursor = cursor
+        self.selected_company_id = selected_company_id
+        print(self.selected_company_id)
         self.go_back_func = go_back_func
         self.root.title("Delete Customer")
 
