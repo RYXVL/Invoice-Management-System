@@ -3,9 +3,10 @@ from tkinter import Toplevel, Label, Button
 
 class UpdateCompany:
 
-    def __init__(self, root, cursor, go_back_func, selected_company_id):
+    def __init__(self, root, cursor, go_back_func, selected_company_id, connection):
         self.root = Toplevel(root)
         self.cursor = cursor
+        self.connection = connection
         self.prev_screen = root
         self.selected_company_id = selected_company_id
         print(self.selected_company_id)

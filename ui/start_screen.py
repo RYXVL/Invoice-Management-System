@@ -29,7 +29,7 @@ class StartScreen:
 
     def open_admin_screen(self):
         self.hide()
-        AdminScreen(self.root, self, self.cursor)
+        AdminScreen(self.root, self, self.cursor, self.connection)
 
     def open_employee_screen(self):
         self.hide()

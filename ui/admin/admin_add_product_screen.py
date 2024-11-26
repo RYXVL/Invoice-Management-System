@@ -1,12 +1,13 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import ttk, Toplevel, Label, Button
+from tkinter import ttk, Toplevel, Button
+from dml.common_dml import CommonDML
 
 class AddProduct:
 
-    def __init__(self, root, cursor, go_back_func, selected_company_id):
+    def __init__(self, root, cursor, go_back_func, selected_company_id, connection):
         self.root = Toplevel(root)
         self.cursor = cursor
+        self.connection = connection
         self.selected_company_id = selected_company_id
         print(self.selected_company_id)
         self.prev_screen = root
@@ -17,21 +18,31 @@ class AddProduct:
         self.input_frame = tk.Frame(self.root)
         self.input_frame.pack(pady=5)
 
-        # Entry for Product Name
-        tk.Label(self.input_frame, text="Enter Product Name:", font=("times new roman", 14)).grid(row=0, column=0, padx=5)
-        self.product_name_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
-        self.product_name_entry.grid(row=0, column=1, padx=5)
+        # Entry for Item Name
+        tk.Label(self.input_frame, text="Item Name:", font=("times new roman", 14)).grid(row=0, column=0, padx=5)
+        self.item_name_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
+        self.item_name_entry.grid(row=0, column=1, padx=5)
+
+        # Entry for Brand ID
+        tk.Label(self.input_frame, text="Brand ID:", font=("times new roman", 14)).grid(row=0, column=2, padx=5)
+        self.brand_id_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
+        self.brand_id_entry.grid(row=0, column=3, padx=5)
 
         # Entry for Product Price
-        tk.Label(self.input_frame, text="Enter Product Price:", font=("times new roman", 14)).grid(row=1, column=0, padx=5)
+        tk.Label(self.input_frame, text="Price:", font=("times new roman", 14)).grid(row=1, column=0, padx=5)
         self.product_price_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
         self.product_price_entry.grid(row=1, column=1, padx=5)
+
+        # Entry for Quantity
+        tk.Label(self.input_frame, text="Quantity:", font=("times new roman", 14)).grid(row=1, column=2, padx=5)
+        self.quantity_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
+        self.quantity_entry.grid(row=1, column=3, padx=5)
 
         # Define the Treeview widget
         self.tree = ttk.Treeview(self.root, show="headings")
 
         # Define columns for the table (based on the data structure)
-        self.tree["columns"] = ("Product ID", "Product Name", "Product Price")
+        self.tree["columns"] = ("Item Name", "Item Description", "Brand ID", "Brand Name")
 
         # Set column headings and column width
         for col in self.tree["columns"]:
@@ -51,7 +62,7 @@ class AddProduct:
 
         # Adjust the window size to fit the table
         self.tree.pack(expand=True, fill="both")
-        self.root.geometry(f"{table_width}x{table_height + 80}")
+        self.root.geometry(f"{table_width}x{table_height + 120}")
 
         # "Add" button below the table
         self.add_button = tk.Button(self.root, text="Add Product", font=("times new roman", 14), command=self.add_item)
@@ -62,27 +73,43 @@ class AddProduct:
 
     def load_data(self):
         # Query the database to load the current products into the treeview
-        self.cursor.execute("SELECT item_name, item_description, brand_id FROM Product_Catalog")
+        selectQuery = CommonDML().fetchNotSoldProductsByACompany(self.selected_company_id)
+        self.cursor.execute(selectQuery)
         rows = self.cursor.fetchall()
         for row in rows:
             self.tree.insert("", "end", values=row)
 
     def add_item(self):
         # Get values from the entry fields
-        product_name = self.product_name_entry.get()
+        item_name = self.item_name_entry.get()
+        brand_id = self.brand_id_entry.get()
         product_price = self.product_price_entry.get()
+        quantity = self.quantity_entry.get()
+
+        # Validate inputs (optional)
+        if not item_name or not brand_id or not product_price or not quantity:
+            tk.messagebox.showerror("Error", "All fields must be filled!")
+            return
 
         # Insert new product into the database
-        self.cursor.execute("INSERT INTO Product (product_name, product_price) VALUES (?, ?)", 
-                            (product_name, product_price))
-        self.cursor.connection.commit()
+        
+        self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
+        max_id_result = self.cursor.fetchone()[0]
+        newProductID = (max_id_result + 1) if max_id_result else 1
 
-        # Add the new product to the treeview
-        self.tree.insert("", "end", values=("New ID", product_name, product_price))  # Replace with actual ID if needed
+        self.cursor.execute(f"""
+            INSERT INTO Product (product_id, product_price, product_quantity, company_id, item_name, brand_id)
+            VALUES ({newProductID}, {product_price}, {quantity}, {self.selected_company_id}, "{item_name}", {brand_id});""")
+        self.connection.commit()
+
+        # Refresh the table
+        self.load_data()
 
         # Optionally, clear the entry fields after adding
-        self.product_name_entry.delete(0, tk.END)
+        self.item_name_entry.delete(0, tk.END)
+        self.brand_id_entry.delete(0, tk.END)
         self.product_price_entry.delete(0, tk.END)
+        self.quantity_entry.delete(0, tk.END)
 
     def go_back(self):
         self.root.destroy()

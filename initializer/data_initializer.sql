@@ -67,3 +67,31 @@ VALUES
 ('cust3', 'custpass3', 203, 'Sophia', 'Martinez', 'sophia.martinez@example.com', '5553456789', 'Elm Drive', 78, 'Westfield', 'TX', '73301', 'USA', 3),
 ('cust4', 'custpass4', 204, 'Liam', 'Brown', 'liam.brown@example.com', '5554567890', 'Cedar Road', 101, 'Lakeside', 'FL', '32003', 'USA', 4),
 ('cust5', 'custpass5', 205, 'Mia', 'Davis', 'mia.davis@example.com', '5555678901', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5);
+
+INSERT IGNORE INTO Product (product_id, product_price, product_quantity, company_id, item_name, brand_id)
+VALUES
+(1, 149.99, 100, 1, 'Ultra Chair', 1),
+(2, 299.99, 50, 1, 'Smart Desk', 1),
+(3, 999.99, 30, 1, 'Echo Laptop', 2),
+(4, 49.99, 200, 1, 'Power Bank', 2),
+(5, 79.99, 150, 1, 'NoiseBuds', 3),
+(1, 59.99, 75, 2, 'Galaxy Light', 7),
+(2, 129.99, 40, 2, 'Pro Backpack', 6),
+(3, 199.99, 20, 2, 'SoundBar Pro', 3),
+(4, 59.99, 100, 2, 'Fit Tracker', 5),
+(5, 199.99, 30, 2, 'Smart Thermostat', 4),
+(1, 249.99, 50, 3, 'Air Purifier', 6),
+(2, 49.99, 120, 3, 'Gaming Mouse', 2),
+(3, 39.99, 90, 3, 'Electric Kettle', 8),
+(4, 29.99, 60, 3, 'Wireless Charger', 2),
+(5, 99.99, 80, 3, 'Compact Fridge', 9),
+(1, 19.99, 110, 4, 'Fitness Mat', 5),
+(2, 399.99, 10, 4, 'Portable Projector', 10),
+(3, 99.99, 25, 4, 'Home Blender', 9),
+(4, 249.99, 15, 4, 'Smart Lock', 4),
+(5, 199.99, 40, 4, 'Water Filter', 6),
+(1, 149.99, 55, 5, 'Digital Frame', 10),
+(2, 49.99, 60, 5, 'Sleep Machine', 9),
+(3, 299.99, 10, 5, 'Vacuum Bot', 6),
+(4, 29.99, 100, 5, 'Electric Toothbrush', 5),
+(5, 89.99, 70, 5, 'Cordless Drill', 8);

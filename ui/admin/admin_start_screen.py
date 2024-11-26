@@ -4,10 +4,11 @@ from ui.admin.admin_menu import AdminMenu
 
 class AdminScreen:
 
-    def __init__(self, root, home_screen, cursor):
+    def __init__(self, root, home_screen, cursor, connection):
         self.home_screen = home_screen
         self.window = Toplevel(root)
         self.cursor = cursor
+        self.connection = connection
         self.prev_screen = root
         self.window.title("Admin Screen")
         self.window.geometry("400x400")
@@ -63,4 +64,4 @@ class AdminScreen:
         print(f"Password: {password}")
         print(f"Selected Company: {selected_company}")
         self.window.withdraw()
-        AdminMenu(self.window, self.cursor, self.companyToID[selected_company])
+        AdminMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection)

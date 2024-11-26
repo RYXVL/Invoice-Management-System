@@ -54,10 +54,11 @@ from tkinter import ttk, Toplevel, Label, Button
 
 class AddEmployee:
 
-    def __init__(self, root, cursor, go_back_func, selected_company_id):
+    def __init__(self, root, cursor, go_back_func, selected_company_id, connection):
         self.root = Toplevel(root)
         self.prev_screen = root
         self.cursor = cursor
+        self.connection = connection
         self.selected_company_id = selected_company_id
         print(self.selected_company_id)
         self.go_back_func = go_back_func
