@@ -1,55 +1,4 @@
-# import tkinter as tk
-# from tkinter import ttk
-
-# class AddEmployee:
-
-#     def __init__(self, root):
-#         self.root = root
-#         self.root.title("Add Employee")
-
-#         # Frame for input fields
-#         self.input_frame = tk.Frame(self.root)
-#         self.input_frame.pack(padx=10, pady=10)
-
-#         # Define fields
-#         fields = [
-#             "Username", "Password", "Employee ID", "First Name", "Last Name", "Email", 
-#             "Phone Number", "Hire Date", "Street Name", "Street No", "City", 
-#             "State", "Postal Code", "Country"
-#         ]
-        
-#         # Dictionary to store entries
-#         self.entries = {}
-
-#         # Loop to create label and entry for each field
-#         for idx, field in enumerate(fields):
-#             tk.Label(self.input_frame, text=field, font=("times new roman", 12)).grid(row=idx, column=0, sticky="w", pady=2)
-            
-#             # If the field is Password, show as asterisks
-#             show_char = "*" if field == "Password" else None
-#             entry = tk.Entry(self.input_frame, font=("times new roman", 12), show=show_char)
-#             entry.grid(row=idx, column=1, pady=2, padx=5)
-            
-#             # Store entry widget in dictionary
-#             self.entries[field] = entry
-
-#         # Add button at the bottom
-#         self.add_button = tk.Button(self.root, text="Add", font=("times new roman", 14), command=self.submit_data)
-#         self.add_button.pack(pady=10)
-
-#     # Dummy function to print entered data
-#     def submit_data(self):
-#         entered_data = {field: entry.get() for field, entry in self.entries.items()}
-#         print("Entered Employee Data:", entered_data)
-
-# if __name__ == '__main__':
-#     root = tk.Tk()
-#     app = AddEmployee(root)
-#     root.geometry("350x600")  # Adjusted window size to fit all fields comfortably
-#     root.mainloop()
-
 import tkinter as tk
-from tkinter import ttk
 from tkinter import ttk, Toplevel, Label, Button
 
 class AddEmployee:
@@ -60,29 +9,67 @@ class AddEmployee:
         self.cursor = cursor
         self.connection = connection
         self.selected_company_id = selected_company_id
-        print(self.selected_company_id)
         self.go_back_func = go_back_func
         self.root.title("Add Employee")
 
-        # Example UI for adding an employee
-        Label(self.root, text="Employee Name").pack(pady=5)
-        self.employee_name_entry = tk.Entry(self.root)
-        self.employee_name_entry.pack(pady=5)
+        # Create a frame for grid layout
+        self.input_frame = tk.Frame(self.root)
+        self.input_frame.pack(padx=10, pady=10)
 
-        Label(self.root, text="Employee Position").pack(pady=5)
-        self.employee_position_entry = tk.Entry(self.root)
-        self.employee_position_entry.pack(pady=5)
+        # Define the labels and keys for fields
+        fields = [
+            "Employee Username", "Employee Password", "Employee First Name", "Employee Last Name", 
+            "Employee Email", "Employee Phone No", "Employee Hire Date", "Employee Street Name", 
+            "Employee Street No", "Employee City", "Employee State", "Employee Postal Code", 
+            "Employee Country"
+        ]
 
-        Button(self.root, text="Save Employee", font=("times new roman", 14), command=self.save_employee).pack(pady=10)
+        self.entries = {}  # Dictionary to hold entry widgets
+
+        # Arrange inputs in rows with 2 per row
+        for idx, field in enumerate(fields):
+            row, col = divmod(idx, 2)
+            Label(self.input_frame, text=field).grid(row=row, column=col*2, padx=5, pady=5, sticky="e")
+            entry = tk.Entry(self.input_frame)
+            entry.grid(row=row, column=col*2+1, padx=5, pady=5, sticky="w")
+            self.entries[field] = entry
+
+        # Add toggle button for Is Admin
+        row = (len(fields) + 1) // 2  # Place it in the next available row
+        Label(self.input_frame, text="Is Admin").grid(row=row, column=0, padx=5, pady=5, sticky="e")
+        self.is_admin_value = tk.BooleanVar(value=False)
+        self.is_admin_button = Button(
+            self.input_frame, text="False", font=("times new roman", 14),
+            command=self.toggle_is_admin, bg="red", fg="white"
+        )
+        self.is_admin_button.grid(row=row, column=1, padx=5, pady=5, sticky="w")
+
+        # Buttons for actions
+        Button(self.root, text="Create Employee", font=("times new roman", 14), command=self.create_employee).pack(pady=10)
         Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
 
-    def save_employee(self):
-        employee_name = self.employee_name_entry.get()
-        employee_position = self.employee_position_entry.get()
+    def toggle_is_admin(self):
+        """Toggle the is_admin value between True and False."""
+        current_value = self.is_admin_value.get()
+        new_value = not current_value
+        self.is_admin_value.set(new_value)
+        self.is_admin_button.config(text=str(new_value), bg="green" if new_value else "red", fg="white")
 
-        self.cursor.execute("INSERT INTO Employee (employee_name, employee_position) VALUES (?, ?)", (employee_name, employee_position))
-        self.cursor.connection.commit()
+    def create_employee(self):
+        """Collect input data and print it."""
+        employee_data = {field: entry.get() for field, entry in self.entries.items()}
+        employee_data["Is Admin"] = self.is_admin_value.get()
+        print("Employee Data:")
+        for key, value in employee_data.items():
+            print(f"{key}: {value}")
 
     def go_back(self):
+        """Go back to the previous screen."""
         self.root.destroy()
         self.prev_screen.deiconify()
+
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     app = AddEmployee(root, cursor=None, go_back_func=None, selected_company_id=1, connection=None)
+#     root.geometry("600x400")
+#     root.mainloop()
