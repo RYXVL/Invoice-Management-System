@@ -92,20 +92,23 @@ class AddProduct:
             return
 
         # Insert new product into the database
-        
-        self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
-        max_id_result = self.cursor.fetchone()[0]
-        newProductID = (max_id_result + 1) if max_id_result else 1
+        try:
+            self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
+            max_id_result = self.cursor.fetchone()[0]
+            newProductID = (max_id_result + 1) if max_id_result else 1
 
-        self.cursor.execute(f"""
-            INSERT INTO Product (product_id, product_price, product_quantity, company_id, item_name, brand_id)
-            VALUES ({newProductID}, {product_price}, {quantity}, {self.selected_company_id}, "{item_name}", {brand_id});""")
-        self.connection.commit()
+            self.cursor.execute(f"""
+                INSERT INTO Product (product_id, product_price, product_quantity, company_id, item_name, brand_id)
+                VALUES ({newProductID}, {product_price}, {quantity}, {self.selected_company_id}, "{item_name}", {brand_id});
+            """)
+            self.connection.commit()
 
-        # Refresh the table
-        self.load_data()
+            # Refresh the table after successful insertion
+            self.refresh_table()
+        except Exception as e:
+            tk.messagebox.showerror("Error", f"Failed to add product: {e}")
 
-        # Optionally, clear the entry fields after adding
+        # Clear the entry fields
         self.item_name_entry.delete(0, tk.END)
         self.brand_id_entry.delete(0, tk.END)
         self.product_price_entry.delete(0, tk.END)
@@ -114,6 +117,15 @@ class AddProduct:
     def go_back(self):
         self.root.destroy()
         self.prev_screen.deiconify()
+
+    def refresh_table(self):
+        # Clear the current contents of the Treeview
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+        # Re-fetch data and update the Treeview
+        self.load_data()
+
 
 
 # Sample data
