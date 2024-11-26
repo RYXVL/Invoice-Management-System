@@ -20,12 +20,12 @@ class AddProduct:
 
         # Entry for Item Name
         tk.Label(self.input_frame, text="Item Name:", font=("times new roman", 14)).grid(row=0, column=0, padx=5)
-        self.item_name_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
+        self.item_name_entry = tk.Entry(self.input_frame, font=("times new roman", 14), state="readonly")
         self.item_name_entry.grid(row=0, column=1, padx=5)
 
         # Entry for Brand ID
         tk.Label(self.input_frame, text="Brand ID:", font=("times new roman", 14)).grid(row=0, column=2, padx=5)
-        self.brand_id_entry = tk.Entry(self.input_frame, font=("times new roman", 14))
+        self.brand_id_entry = tk.Entry(self.input_frame, font=("times new roman", 14), state="readonly")
         self.brand_id_entry.grid(row=0, column=3, padx=5)
 
         # Entry for Product Price
@@ -51,6 +51,9 @@ class AddProduct:
 
         # Insert data into the table (if there's existing data, can be fetched from database)
         self.load_data()
+
+        # Bind the Treeview selection event
+        self.tree.bind("<<TreeviewSelect>>", self.on_row_select)
 
         # Calculate the required width and height
         num_rows = len(self.tree.get_children())
@@ -81,18 +84,19 @@ class AddProduct:
 
     def add_item(self):
         # Get values from the entry fields
-        item_name = self.item_name_entry.get()
-        brand_id = self.brand_id_entry.get()
         product_price = self.product_price_entry.get()
         quantity = self.quantity_entry.get()
 
         # Validate inputs (optional)
-        if not item_name or not brand_id or not product_price or not quantity:
-            tk.messagebox.showerror("Error", "All fields must be filled!")
+        if not product_price or not quantity:
+            tk.messagebox.showerror("Error", "Price and Quantity must be filled!")
             return
 
         # Insert new product into the database
         try:
+            item_name = self.item_name_entry.get()
+            brand_id = self.brand_id_entry.get()
+
             self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
             max_id_result = self.cursor.fetchone()[0]
             newProductID = (max_id_result + 1) if max_id_result else 1
@@ -108,11 +112,34 @@ class AddProduct:
         except Exception as e:
             tk.messagebox.showerror("Error", f"Failed to add product: {e}")
 
-        # Clear the entry fields
+        # Clear the quantity and price entry fields
+        self.item_name_entry.config(state="normal")
         self.item_name_entry.delete(0, tk.END)
+        self.item_name_entry.config(state="readonly")
+
+        self.brand_id_entry.config(state="normal")
         self.brand_id_entry.delete(0, tk.END)
+        self.brand_id_entry.config(state="readonly")
         self.product_price_entry.delete(0, tk.END)
         self.quantity_entry.delete(0, tk.END)
+
+    def on_row_select(self, event):
+        # Get the selected row data
+        selected_item = self.tree.selection()
+        if selected_item:
+            item_values = self.tree.item(selected_item[0], "values")
+            item_name, _, brand_id, _ = item_values
+
+            # Set the non-editable fields
+            self.item_name_entry.config(state="normal")
+            self.item_name_entry.delete(0, tk.END)
+            self.item_name_entry.insert(0, item_name)
+            self.item_name_entry.config(state="readonly")
+
+            self.brand_id_entry.config(state="normal")
+            self.brand_id_entry.delete(0, tk.END)
+            self.brand_id_entry.insert(0, brand_id)
+            self.brand_id_entry.config(state="readonly")
 
     def go_back(self):
         self.root.destroy()
@@ -125,19 +152,3 @@ class AddProduct:
 
         # Re-fetch data and update the Treeview
         self.load_data()
-
-
-
-# Sample data
-data = [
-    {"ID": 1, "Name": "Alice", "Age": 24},
-    {"ID": 2, "Name": "Bob", "Age": 30},
-    {"ID": 3, "Name": "Charlie", "Age": 22},
-]
-
-# if __name__  == '__main__':
-
-#     root = tk.Tk()
-#     app = AddProduct(root, data)
-#     root.geometry("400x300")
-#     root.mainloop()
