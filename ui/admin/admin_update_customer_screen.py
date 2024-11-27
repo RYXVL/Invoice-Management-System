@@ -27,36 +27,51 @@ class UpdateCustomer:
         for i, label in enumerate(labels):
             Label(self.input_frame, text=label, font=("times new roman", 12)).grid(row=i, column=0, sticky="w", pady=5)
             entry = tk.Entry(self.input_frame, font=("times new roman", 12))
+            if label == "Customer ID":
+                entry.config(state="readonly")  # Make "Customer ID" non-editable
             entry.grid(row=i, column=1, pady=5, padx=5)
             self.entries[label] = entry
 
         # Table for displaying customer data
         self.treeview = ttk.Treeview(self.root, columns=("customer_id", "username", "first_name", "last_name", "email", "phone_no", "street_name", "street_no", "city", "state", "postal_code", "country"), show="headings")
+
+        # Horizontal scrollbar
+        self.scrollbar = tk.Scrollbar(self.root, orient="horizontal", command=self.treeview.xview)
+        self.treeview.config(xscrollcommand=self.scrollbar.set)
+        self.scrollbar.grid(row=2, column=0, padx=10, pady=10, columnspan=2, sticky="ew")
+
         self.treeview.grid(row=1, column=0, padx=10, pady=10, columnspan=2)
-        
-        # Define the table headers in the desired order
-        self.treeview.heading("customer_id", text="Customer ID")
-        self.treeview.heading("username", text="Username")
-        self.treeview.heading("first_name", text="First Name")
-        self.treeview.heading("last_name", text="Last Name")
-        self.treeview.heading("email", text="Email")
-        self.treeview.heading("phone_no", text="Phone No")
-        self.treeview.heading("street_name", text="Street Name")
-        self.treeview.heading("street_no", text="Street No")
-        self.treeview.heading("city", text="City")
-        self.treeview.heading("state", text="State")
-        self.treeview.heading("postal_code", text="Postal Code")
-        self.treeview.heading("country", text="Country")
+
+        # Define the table headers in the desired order and set column widths
+        column_widths = {
+            "customer_id": 80,
+            "username": 100,
+            "first_name": 100,
+            "last_name": 100,
+            "email": 120,
+            "phone_no": 100,
+            "street_name": 100,
+            "street_no": 80,
+            "city": 100,
+            "state": 100,
+            "postal_code": 80,
+            "country": 100
+        }
+
+        for col, width in column_widths.items():
+            self.treeview.heading(col, text=col.replace("_", " ").title())
+            self.treeview.column(col, width=width, anchor="w")
+
         self.treeview.bind("<ButtonRelease-1>", self.on_row_select)  # Bind row selection
 
         # Load the customer data into the table
         self.load_customers()
 
         # Update button
-        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_customer).grid(row=2, column=0, pady=10, sticky="w", padx=10)
-        
+        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_customer).grid(row=3, column=0, pady=10, sticky="w", padx=10)
+
         # Back button
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).grid(row=2, column=1, pady=10, sticky="e", padx=10)
+        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).grid(row=3, column=1, pady=10, sticky="e", padx=10)
 
     def load_customers(self):
         # Clear the existing data in the table
@@ -76,9 +91,13 @@ class UpdateCustomer:
         selected_item = self.treeview.selection()[0]
         selected_data = self.treeview.item(selected_item, "values")
 
-        # Populate the input fields with the selected row's data
+        # Temporarily make "Customer ID" editable to populate it, then set it back to "readonly"
+        self.entries["Customer ID"].config(state="normal")
         self.entries["Customer ID"].delete(0, tk.END)
         self.entries["Customer ID"].insert(0, selected_data[0])
+        self.entries["Customer ID"].config(state="readonly")
+
+        # Populate the other fields
         self.entries["Username"].delete(0, tk.END)
         self.entries["Username"].insert(0, selected_data[1])
         self.entries["First Name"].delete(0, tk.END)
@@ -101,6 +120,7 @@ class UpdateCustomer:
         self.entries["Postal Code"].insert(0, selected_data[10])
         self.entries["Country"].delete(0, tk.END)
         self.entries["Country"].insert(0, selected_data[11])
+
 
     def update_customer(self):
         details = {label: entry.get() for label, entry in self.entries.items()}
@@ -130,6 +150,17 @@ class UpdateCustomer:
 
         # Refresh the table to reflect the updated data
         self.load_customers()
+
+        # Clear all the fields after the update
+        for label, entry in self.entries.items():
+            if label == "Customer ID":
+                entry.config(state="normal")  # Temporarily make the "Customer ID" field editable
+                entry.delete(0, tk.END)  # Clear the text in the "Customer ID" field
+                entry.config(state="readonly")  # Set it back to readonly after clearing
+            else:
+                entry.delete(0, tk.END)  # Clear text for other fields
+
+
 
     def go_back(self):
         self.root.destroy()
