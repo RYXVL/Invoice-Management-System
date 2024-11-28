@@ -320,7 +320,7 @@ class GenerateInvoice:
         # Calculate subtotal
         subtotal = sum(float(x[4]) for x in billed_items)
         c.drawCentredString(148, 218, "Subtotal: ")
-        c.drawCentredString(173, 218, str(subtotal))
+        c.drawCentredString(173, 218, str(round(subtotal, 2)))
 
         # Draw company logo and details
         # c.translate(10, 40)
