@@ -1,15 +1,17 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, ttk, Entry
 from reportlab.pdfgen import canvas
+from datetime import date
 
 
 class GenerateInvoice:
-    def __init__(self, employee_menu, cursor, selected_company_id, connection):
+    def __init__(self, employee_menu, cursor, selected_company_id, connection, employee_id):
         self.employee_menu = employee_menu
         self.window = Toplevel()
         self.cursor = cursor
         self.connection = connection
         self.selected_company_id = selected_company_id
+        self.employee_id = employee_id
         print(f"GenerateInvoice: {self.selected_company_id}")
         self.window.title("Generate Invoice")
         self.window.geometry("600x800")
@@ -19,6 +21,10 @@ class GenerateInvoice:
         # Frame for input fields and Add button
         self.input_frame = tk.Frame(self.window)
         self.input_frame.pack(pady=10)
+
+        Label(self.input_frame, text="Customer ID:", font=("times new roman", 12)).grid(row=0, column=5, padx=5, pady=5)
+        self.customer_id_entry = Entry(self.input_frame, font=("times new roman", 12))
+        self.customer_id_entry.grid(row=0, column=6, padx=5, pady=5)
 
         # Product ID field
         Label(self.input_frame, text="Product ID:", font=("times new roman", 12)).grid(row=0, column=0, padx=5, pady=5)
@@ -200,7 +206,43 @@ class GenerateInvoice:
         result = self.cursor.fetchone()
         return result[0] if result else None
     
+    def getNewInvoiceID(self):
+        self.cursor.execute(f"SELECT MAX(invoice_id) FROM Invoice;")
+        max_id_result = self.cursor.fetchone()[0]
+        # newInvoiceID = (max_id_result + 1) if max_id_result else 1
+        return max_id_result
+    
+    def insertInvoiceItems(self, customer_id, billed_items):
+        invoice_total = 0
+        for item in billed_items:
+            invoice_total += int(float(item[4]))
+        todaysDate = date.today().strftime("%Y-%m-%d")
+        queryInsertIntoInvoice = f"INSERT INTO Invoice (invoice_date, invoice_total_amount) VALUES (\"{todaysDate}\", {invoice_total});"
+        self.cursor.execute(queryInsertIntoInvoice)
+        self.connection.commit()
+        
+        newInvoiceID = self.getNewInvoiceID()
+        for item in billed_items:
+            queryGetProductID = f"SELECT product_id FROM Product WHERE company_id = {self.selected_company_id} AND item_name = \"{item[1]}\";"
+            self.cursor.execute(queryGetProductID)
+            product_id = self.cursor.fetchone()[0]
+            print(f"INVOICE ID: {newInvoiceID}")
+            queryInsertIntoInvoiceLineItems = f"INSERT INTO Invoice_line_items (invoice_item_id, invoice_item_quantity, company_id, invoice_id, product_id) VALUES ({item[0]}, {item[3]}, {self.selected_company_id}, {newInvoiceID}, {product_id});"
+            self.cursor.execute(queryInsertIntoInvoiceLineItems)
+            self.connection.commit()
+
+        queryInsertIntoProcesses = f"INSERT INTO Processes (company_id, customer_id, employee_id, invoice_id) VALUES ({self.selected_company_id}, {customer_id}, {self.employee_id}, {newInvoiceID});"
+        self.cursor.execute(queryInsertIntoProcesses)
+        self.connection.commit()
+
+ 
+    
     def generate_invoice(self):
+        customer_id = self.customer_id_entry.get()
+        if not customer_id:
+            print("Error: Customer ID is required.")
+            return
+
         # Prepare the list of items for the invoice
         billed_items = []
         for item in self.billed_treeview.get_children():
@@ -208,21 +250,24 @@ class GenerateInvoice:
             serial, item_name, unit_price, quantity_bought, price = row
             billed_items.append([serial, item_name, unit_price, quantity_bought, price])
 
+        self.insertInvoiceItems(customer_id, billed_items)
+
         # Fetch necessary company details from the database
         query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company_id};"
         self.cursor.execute(query)
         company_details = self.cursor.fetchone()
 
         company_name, address, city, contact_number = company_details
+        print(f"Customer ID: {customer_id}")
         print(billed_items)
 
         # Generate and open the invoice PDF
-        self.generate_invoice_pdf(billed_items, company_name, address, city, contact_number)
+        self.generate_invoice_pdf(billed_items, company_name, address, city, contact_number, customer_id)
 
 
-    def generate_invoice_pdf(self, billed_items, company_name, address, city, contact_number):
+    def generate_invoice_pdf(self, billed_items, company_name, address, city, contact_number, customer_id):
         # Generate a random invoice number within the specified range
-        generated_invoice_no = 1
+        generated_invoice_no = self.getNewInvoiceID()
         # generated_invoice_no = random.randint(1000000, 9999999)
 
         # Insert company and customer values into their corresponding tables and commit changes
@@ -242,7 +287,7 @@ class GenerateInvoice:
         WIDTH = [25, 75, 125, 148, 173]
 
         # Create a canvas with a custom name and custom size
-        c = canvas.Canvas(f'{generated_invoice_no}_abcd.pdf', pagesize=(200, 250), bottomup=0)
+        c = canvas.Canvas(f'{self.selected_company_id}_{customer_id}_invoice{generated_invoice_no}.pdf', pagesize=(200, 250), bottomup=0)
 
         # Set font color for the entire PDF
         c.setFillColorRGB(0, 0, 0)
@@ -264,8 +309,8 @@ class GenerateInvoice:
 
         # Draw vertical lines for the bill layout
         c.line(35, 108, 35, 210)
-        c.line(115, 108, 115, 210)
-        c.line(135, 108, 135, 210)
+        c.line(110, 108, 110, 210)
+        c.line(140, 108, 140, 210)
         c.line(160, 108, 160, 210)
 
         # Draw horizontal lines
@@ -300,16 +345,21 @@ class GenerateInvoice:
         c.setFont("Times-Bold", 8)
         c.drawCentredString(100, 55, "INVOICE")
 
+        queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};"
+        self.cursor.execute(queryGetCustomerInfo)
+        customer_info = self.cursor.fetchone()
+        customer_first_name, customer_last_name = customer_info
+
         # Add invoice details
         c.setFont("Times-Bold", 5)
         c.drawRightString(70, 70, "Invoice No. :")
         c.drawRightString(100, 70, f"{generated_invoice_no}")
-        # c.drawRightString(70, 80, "Date :")
-        # c.drawRightString(100, 80, self.date)
-        # c.drawRightString(70, 90, "Customer Name :")
-        # c.drawRightString(100, 90, self.c_name)
-        # c.drawRightString(70, 100, "Phone No. :")
-        # c.drawRightString(100, 100, self.contact)
+        c.drawRightString(70, 80, "Date :")
+        c.drawRightString(100, 80, date.today().strftime("%Y-%m-%d"))
+        c.drawRightString(70, 90, "Customer ID :")
+        c.drawRightString(100, 90, customer_id)
+        c.drawRightString(70, 100, "Customer Name :")
+        c.drawRightString(100, 100, f"{customer_first_name} {customer_last_name}")
 
         # Draw item table header
         c.roundRect(15, 108, 170, 130, 10, stroke=1, fill=0)
@@ -328,59 +378,7 @@ class GenerateInvoice:
 
         # Open the generated invoice PDF
         import os
-        os.startfile(f'{generated_invoice_no}_abcd.pdf')
-    
-
-    # def generate_invoice_pdf(self, billed_items, company_name, address, city, contact_number):
-    #     c = canvas.Canvas("Invoice.pdf", pagesize=(200, 250), bottomup=0)
-    #     width, height = 200, 250
-
-    #     # Company Information
-    #     c.setFont("Helvetica-Bold", 18)
-    #     c.drawString(30, height - 50, company_name)
-    #     c.setFont("Helvetica", 12)
-    #     c.drawString(30, height - 70, f"Address: {address}")
-    #     c.drawString(30, height - 85, f"City: {city}")
-    #     c.drawString(30, height - 100, f"Contact: {contact_number}")
-
-    #     # Invoice Table Headers
-    #     c.setFont("Helvetica-Bold", 10)
-    #     c.drawString(30, height - 130, "Serial")
-    #     c.drawString(80, height - 130, "Item Name")
-    #     c.drawString(220, height - 130, "Unit Price")
-    #     c.drawString(320, height - 130, "Quantity")
-    #     c.drawString(420, height - 130, "Price")
-
-    #     # Draw a horizontal line under the headers
-    #     c.line(30, height - 135, width - 30, height - 135)
-
-    #     # Billed Items
-    #     y = height - 150
-    #     for item in billed_items:
-    #         c.setFont("Helvetica", 10)
-    #         c.drawString(30, y, str(item[0]))  # Serial
-    #         c.drawString(80, y, item[1])  # Item Name
-    #         c.drawString(220, y, f"{float(item[2]):.2f}")  # Unit Price
-    #         c.drawString(320, y, str(item[3]))  # Quantity
-    #         c.drawString(420, y, f"{float(item[4]):.2f}")  # Total Price
-    #         y -= 20
-
-    #     # Draw a horizontal line above the total amount
-    #     c.line(30, y - 10, width - 30, y - 10)
-
-    #     # Total Amount (Sum of all prices)
-    #     total_amount = sum([float(item[4]) for item in billed_items])
-    #     c.setFont("Helvetica-Bold", 12)
-    #     c.drawString(320, y - 30, "Total Amount:")
-    #     c.drawString(420, y - 30, f"{total_amount:.2f}")
-
-    #     # Save the PDF
-    #     c.save()
-
-    #     import webbrowser
-    #     # Open the generated invoice PDF
-    #     webbrowser.open("Invoice.pdf")
-
+        os.startfile(f'{self.selected_company_id}_{customer_id}_invoice{generated_invoice_no}.pdf')
 
     def go_back(self):
         self.window.destroy()

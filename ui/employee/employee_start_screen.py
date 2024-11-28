@@ -53,7 +53,7 @@ class EmployeeScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
-        self.cursor.execute(f"SELECT employee_password FROM employee WHERE company_id = {self.companyToID[selected_company]} AND employee_user_name =  '{username}' AND is_admin = 0;")
+        self.cursor.execute(f"SELECT employee_password, employee_id FROM employee WHERE company_id = {self.companyToID[selected_company]} AND employee_user_name =  '{username}' AND is_admin = 0;")
         result = self.cursor.fetchall()
         if len(result) == 0:
             print("Invalid company ID, username or no employee access!")
@@ -64,5 +64,6 @@ class EmployeeScreen:
         print(f"Username: {username}")
         print(f"Password: {password}")
         print(f"Selected Company: {selected_company}")
+        print(f"Employee ID: {result[0][1]}")
         self.window.withdraw()  # Hide the Employee Screen
-        EmployeeMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection)  # Open Employee Menu with the current window and cursor
+        EmployeeMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection, result[0][1])  # Open Employee Menu with the current window and cursor
