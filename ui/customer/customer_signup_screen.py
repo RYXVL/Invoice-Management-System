@@ -176,7 +176,7 @@ class CustomerSignupScreen:
         # self.cursor.connection.commit()
 
         self.window.withdraw()
-        CustomerMainScreen(self.window, self)
+        CustomerMainScreen(self.window, self,customer_id,self.cursor,self.companyToID[company_name])
 
     def get_company_id(self, company_name):
         return self.companyToID[self.company_var.get()]

@@ -5,9 +5,10 @@ from datetime import date
 
 class ViewInvoice:
 
-    def __init__(self, employee_menu, cursor, selected_company_id, connection):
+    def __init__(self, employee_menu, root, cursor, selected_company_id, connection):
         self.employee_menu = employee_menu  # Store the reference to the EmployeeMenu instance
         self.window = Toplevel()
+        self.prev_screen = root
         self.cursor = cursor
         self.connection = connection
         self.selected_company_id = selected_company_id
@@ -198,4 +199,4 @@ class ViewInvoice:
 
     def go_back(self):
         self.window.destroy()  # Close the View Invoice window
-        self.employee_menu.window.deiconify()  # Show the Employee Menu again
+        self.prev_screen.deiconify()  # Show the Employee Menu again

@@ -62,11 +62,13 @@ class CustomerLoginScreen:
         if password != result[0][0]:
             print("Wrong password entered!")
             return
+        self.cursor.execute(f"SELECT customer_id FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+        customer_id = self.cursor.fetchone()[0]       
         print(f"Username: {username}")
         print(f"Password: {password}")
         print(f"Selected Company: {selected_company}")
         self.window.withdraw()
-        CustomerMainScreen(self.window, self)
+        CustomerMainScreen(self.window, self, customer_id, self.cursor,self.companyToID[selected_company])
 
     def go_back(self):
         self.window.destroy()

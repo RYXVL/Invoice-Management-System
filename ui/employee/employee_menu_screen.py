@@ -9,7 +9,7 @@ class EmployeeMenu:
         self.selected_company_id = selected_company_id
         print(f'EmployeeMenu: {self.selected_company_id}')
         self.employee_screen = employee_screen  # Store the reference to the EmployeeScreen instance
-        self.window = Toplevel()
+        self.window = Toplevel(employee_screen)
         self.cursor = cursor
         self.connection = connection
         self.employee_id = employee_id
@@ -24,11 +24,11 @@ class EmployeeMenu:
 
     def open_generate_invoice(self):
         self.window.withdraw()  # Hide the Employee Menu
-        GenerateInvoice(self, self.cursor, self.selected_company_id, self.connection, self.employee_id)  # Open the Generate Invoice screen
+        GenerateInvoice(self, self.window, self.cursor, self.selected_company_id, self.connection, self.employee_id)  # Open the Generate Invoice screen
 
     def open_view_invoice(self):
         self.window.withdraw()  # Hide the Employee Menu
-        ViewInvoice(self, self.cursor, self.selected_company_id, self.connection)  # Open the View Invoice screen
+        ViewInvoice(self,self.window, self.cursor, self.selected_company_id, self.connection)  # Open the View Invoice screen
 
     def go_back(self):
         self.window.destroy()  # Close the Employee Menu

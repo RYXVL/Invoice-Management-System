@@ -5,9 +5,10 @@ from datetime import date
 
 
 class GenerateInvoice:
-    def __init__(self, employee_menu, cursor, selected_company_id, connection, employee_id):
+    def __init__(self,employee_menu, root, cursor, selected_company_id, connection, employee_id):
         self.employee_menu = employee_menu
         self.window = Toplevel()
+        self.prev_screen = root
         self.cursor = cursor
         self.connection = connection
         self.selected_company_id = selected_company_id
@@ -382,4 +383,4 @@ class GenerateInvoice:
 
     def go_back(self):
         self.window.destroy()
-        self.employee_menu.show_menu()
+        self.prev_screen.deiconify()
