@@ -90,6 +90,8 @@ class GenerateInvoice:
         # Add Delete Added Item button
         Button(self.window, text="Delete Added Item", font=("times new roman", 12), command=self.delete_item).pack(pady=10)
 
+        Button(self.window, text="Generate Invoice", font=("times new roman", 14), command=self.generate_invoice).pack(pady=10)
+
         # Add Back button
         Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
 
@@ -102,7 +104,7 @@ class GenerateInvoice:
             self.treeview.delete(row)
 
         # Fetch data from the database
-        query = f"SELECT p.product_id, p.item_name, b.brand_name, p.product_price, p.product_quantity FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {self.selected_company_id};"
+        query = f"SELECT p.product_id, p.item_name, b.brand_name, p.product_price, p.product_quantity FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {self.selected_company_id} and p.product_quantity != 0;"
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
 
@@ -194,6 +196,17 @@ class GenerateInvoice:
         )
         result = self.cursor.fetchone()
         return result[0] if result else None
+    
+    def generate_invoice(self):
+        print("Invoice:")
+        print(f"{'Serial':<10}{'Item Name':<20}{'Unit Price':<15}{'Quantity Bought':<20}{'Price':<10}")
+        print("-" * 75)
+        for item in self.billed_treeview.get_children():
+            row = self.billed_treeview.item(item, "values")
+            serial, item_name, unit_price, quantity_bought, price = row
+            print(f"{serial:<10}{item_name:<20}{unit_price:<15}{quantity_bought:<20}{price:<10}")
+        print("-" * 75)
+        print("Invoice generated successfully!")
 
     def go_back(self):
         self.window.destroy()
