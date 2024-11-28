@@ -11,7 +11,7 @@ class GenerateInvoice:
         self.selected_company_id = selected_company_id
         print(f"GenerateInvoice: {self.selected_company_id}")
         self.window.title("Generate Invoice")
-        self.window.geometry("600x700")
+        self.window.geometry("600x800")
         
         Label(self.window, text="Generate Invoice", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
 
@@ -87,6 +87,9 @@ class GenerateInvoice:
             self.billed_treeview.heading(col, text=text)
             self.billed_treeview.column(col, width=120, anchor="center")
 
+        # Add Delete Added Item button
+        Button(self.window, text="Delete Added Item", font=("times new roman", 12), command=self.delete_item).pack(pady=10)
+
         # Add Back button
         Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
 
@@ -119,7 +122,6 @@ class GenerateInvoice:
             self.product_id_entry.config(state="readonly")
 
     def add_item(self):
-        # Get the entered data
         product_id = self.product_id_entry.get()
         quantity_text = self.quantity_entry.get()
 
@@ -133,7 +135,6 @@ class GenerateInvoice:
             print("Error: Quantity must be a number.")
             return
 
-        # Get the remaining quantity of the selected product
         selected_item = self.treeview.selection()
         if not selected_item:
             print("Error: No row selected.")
@@ -147,7 +148,6 @@ class GenerateInvoice:
         if quantity > remaining_quantity:
             print("Error: Entered quantity exceeds remaining quantity.")
         else:
-            # Calculate total price
             total_price = unit_price * quantity
 
             # Insert into the billed items table
@@ -157,7 +157,11 @@ class GenerateInvoice:
             )
             self.serial_number += 1
 
-            print(f"Added: {item_name}, Quantity: {quantity}, Price: {total_price}")
+            # Update the product quantity in the database and the product table
+            new_quantity = remaining_quantity - quantity
+            self.cursor.execute(f"UPDATE product SET product_quantity = {new_quantity} WHERE product_id = {product_id} AND company_id = {self.selected_company_id};")
+            self.connection.commit()
+            self.load_products()
 
             # Clear the fields
             self.product_id_entry.config(state="normal")
@@ -165,6 +169,32 @@ class GenerateInvoice:
             self.product_id_entry.config(state="readonly")
             self.quantity_entry.delete(0, tk.END)
 
+    def delete_item(self):
+        selected_item = self.billed_treeview.selection()
+        if not selected_item:
+            print("Error: No row selected in billed items table.")
+            return
+
+        selected_data = self.billed_treeview.item(selected_item[0], "values")
+        serial, item_name, unit_price, quantity_bought, price = selected_data
+
+        # Update the product quantity in the database and product table
+        product_id = self.get_product_id(item_name)
+        if product_id:
+            self.cursor.execute(f"UPDATE product SET product_quantity = product_quantity + {quantity_bought} WHERE product_id = {product_id} AND company_id = {self.selected_company_id};")
+            self.connection.commit()
+            self.load_products()
+
+        # Delete the item from the billed items table
+        self.billed_treeview.delete(selected_item[0])
+
+    def get_product_id(self, item_name):
+        self.cursor.execute(
+            f"SELECT product_id FROM product WHERE item_name = '{item_name}' AND company_id = {self.selected_company_id};"
+        )
+        result = self.cursor.fetchone()
+        return result[0] if result else None
+
     def go_back(self):
-        self.window.destroy()  # Close the Generate Invoice window
-        self.employee_menu.window.deiconify()  # Show the Employee Menu again
+        self.window.destroy()
+        self.employee_menu.window.deiconify()
