@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import Toplevel, Label, Button, Entry, messagebox
 from reportlab.pdfgen import canvas
 from datetime import date
+from dml.common_dml import CommonDML
+from dml.company_dml import CompanyDML
+from dml.processes_dml import ProcessDML
+from dml.customer_dml import CustomerDML
 
 class ViewInvoice:
 
@@ -33,7 +37,7 @@ class ViewInvoice:
 
         # Prepare the list of items for the invoice
 
-        queryGetInvoiceItems = f"select invoice_item_id, item_name, product_price, invoice_item_quantity, product_price * invoice_item_quantity as price from invoice natural join invoice_line_items natural join product where invoice_id = {invoice_id};"
+        queryGetInvoiceItems = CommonDML.getInvoiceItems(invoice_id)
         self.cursor.execute(queryGetInvoiceItems)
         result = self.cursor.fetchall()
 
@@ -51,13 +55,15 @@ class ViewInvoice:
         # self.insertInvoiceItems(customer_id, billed_items)
 
         # Fetch necessary company details from the database
-        query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company_id};"
+        # query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company_id};"
+        query = CompanyDML.getCompanyInfoForBilling(self.selected_company_id)
         self.cursor.execute(query)
         company_details = self.cursor.fetchone()
         company_name, address, city, contact_number = company_details
         # print(f"Customer ID: {customer_id}")
         # print(billed_items)
-        queryGetCustomerID = f"select customer_id from processes where invoice_id = {invoice_id};"
+        # queryGetCustomerID = f"select customer_id from processes where invoice_id = {invoice_id};"
+        queryGetCustomerID = ProcessDML.getCustomerIdOfAnInvoice(invoice_id)
         self.cursor.execute(queryGetCustomerID)
         customer_id = self.cursor.fetchone()[0]
         customer_id = str(customer_id)
@@ -146,7 +152,8 @@ class ViewInvoice:
         c.setFont("Times-Bold", 8)
         c.drawCentredString(100, 55, "INVOICE")
 
-        queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};"
+        # queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};"
+        queryGetCustomerInfo = CustomerDML.getCustomerInfoForBilling(self.selected_company_id, customer_id)
         self.cursor.execute(queryGetCustomerInfo)
         customer_info = self.cursor.fetchone()
         customer_first_name, customer_last_name = customer_info

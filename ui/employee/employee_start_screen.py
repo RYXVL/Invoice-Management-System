@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu
 from ui.employee.employee_menu_screen import EmployeeMenu
+from dml.company_dml import CompanyDML
+from dml.employee_dml import EmployeeDML
 
 class EmployeeScreen:
     
@@ -37,7 +39,7 @@ class EmployeeScreen:
         back_button.pack(pady=10)
 
     def fetch_company_names(self):
-        self.cursor.execute("SELECT company_id, company_name FROM Company")
+        self.cursor.execute(CompanyDML.getBasicInfoAllCompanies())
         queryResult = self.cursor.fetchall()
         companyToID = {}
         for row in queryResult:
@@ -56,7 +58,7 @@ class EmployeeScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
-        self.cursor.execute(f"SELECT employee_password, employee_id FROM employee WHERE company_id = {self.companyToID[selected_company]} AND employee_user_name =  '{username}' AND is_admin = 0;")
+        self.cursor.execute(EmployeeDML.getEmployeeIdAndPassword(self.companyToID[selected_company], username))
         result = self.cursor.fetchall()
         if len(result) == 0:
             print("Invalid company ID, username or no employee access!")

@@ -2,6 +2,13 @@ import tkinter as tk
 from tkinter import Toplevel, Label, Button, ttk, Entry
 from reportlab.pdfgen import canvas
 from datetime import date
+from dml.common_dml import CommonDML
+from dml.product_dml import ProductDML
+from dml.invoice_dml import InvoiceDML
+from dml.invoice_line_items_dml import InvoiceLineItemsDML
+from dml.processes_dml import ProcessDML
+from dml.company_dml import CompanyDML
+from dml.customer_dml import CustomerDML
 
 
 class GenerateInvoice:
@@ -113,7 +120,8 @@ class GenerateInvoice:
             self.treeview.delete(row)
 
         # Fetch data from the database
-        query = f"SELECT p.product_id, p.item_name, b.brand_name, p.product_price, p.product_quantity FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {self.selected_company_id} and p.product_quantity != 0;"
+        # query = f"SELECT p.product_id, p.item_name, b.brand_name, p.product_price, p.product_quantity FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {self.selected_company_id} and p.product_quantity != 0;"
+        query = CommonDML.getProductsOfACompany(self.selected_company_id)
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
 
@@ -172,7 +180,7 @@ class GenerateInvoice:
 
             # Update the product quantity in the database and the product table
             new_quantity = remaining_quantity - quantity
-            self.cursor.execute(f"UPDATE product SET product_quantity = {new_quantity} WHERE product_id = {product_id} AND company_id = {self.selected_company_id};")
+            self.cursor.execute(ProductDML.updateProductQuantityOfACompany(self.selected_company_id, product_id, new_quantity))
             self.connection.commit()
             self.load_products()
 
@@ -194,7 +202,10 @@ class GenerateInvoice:
         # Update the product quantity in the database and product table
         product_id = self.get_product_id(item_name)
         if product_id:
-            self.cursor.execute(f"UPDATE product SET product_quantity = product_quantity + {quantity_bought} WHERE product_id = {product_id} AND company_id = {self.selected_company_id};")
+            self.cursor.execute(ProductDML.getQuantityOfAProductOfACompany(self.selected_company_id, product_id))
+            old_qty = self.cursor.fetchone()[0]
+            self.cursor.execute(ProductDML.updateProductQuantityOfACompany(self.selected_company_id, product_id, old_qty + quantity_bought))
+            # self.cursor.execute(f"UPDATE product SET product_quantity = product_quantity + {quantity_bought} WHERE product_id = {product_id} AND company_id = {self.selected_company_id};")
             self.connection.commit()
             self.load_products()
 
@@ -202,14 +213,12 @@ class GenerateInvoice:
         self.billed_treeview.delete(selected_item[0])
 
     def get_product_id(self, item_name):
-        self.cursor.execute(
-            f"SELECT product_id FROM product WHERE item_name = '{item_name}' AND company_id = {self.selected_company_id};"
-        )
+        self.cursor.execute(ProductDML.getProductIDOfACompanyProduct(self.selected_company_id, item_name))
         result = self.cursor.fetchone()
         return result[0] if result else None
     
     def getNewInvoiceID(self):
-        self.cursor.execute(f"SELECT MAX(invoice_id) FROM Invoice;")
+        self.cursor.execute(InvoiceDML.getMaxInvoiceID())
         max_id_result = self.cursor.fetchone()[0]
         # newInvoiceID = (max_id_result + 1) if max_id_result else 1
         return max_id_result
@@ -219,21 +228,25 @@ class GenerateInvoice:
         for item in billed_items:
             invoice_total += int(float(item[4]))
         todaysDate = date.today().strftime("%Y-%m-%d")
-        queryInsertIntoInvoice = f"INSERT INTO Invoice (invoice_date, invoice_total_amount) VALUES (\"{todaysDate}\", {invoice_total});"
+        # queryInsertIntoInvoice = f"INSERT INTO Invoice (invoice_date, invoice_total_amount) VALUES (\"{todaysDate}\", {invoice_total});"
+        queryInsertIntoInvoice = InvoiceDML.insertNewInvoice(todaysDate, invoice_total)
         self.cursor.execute(queryInsertIntoInvoice)
         self.connection.commit()
         
         newInvoiceID = self.getNewInvoiceID()
         for item in billed_items:
-            queryGetProductID = f"SELECT product_id FROM Product WHERE company_id = {self.selected_company_id} AND item_name = \"{item[1]}\";"
+            # queryGetProductID = f"SELECT product_id FROM Product WHERE company_id = {self.selected_company_id} AND item_name = \"{item[1]}\";"
+            queryGetProductID = ProductDML.getProductIDOfACompanyProduct(self.selected_company_id, item[1])
             self.cursor.execute(queryGetProductID)
             product_id = self.cursor.fetchone()[0]
             print(f"INVOICE ID: {newInvoiceID}")
-            queryInsertIntoInvoiceLineItems = f"INSERT INTO Invoice_line_items (invoice_item_id, invoice_item_quantity, company_id, invoice_id, product_id) VALUES ({item[0]}, {item[3]}, {self.selected_company_id}, {newInvoiceID}, {product_id});"
+            # queryInsertIntoInvoiceLineItems = f"INSERT INTO Invoice_line_items (invoice_item_id, invoice_item_quantity, company_id, invoice_id, product_id) VALUES ({item[0]}, {item[3]}, {self.selected_company_id}, {newInvoiceID}, {product_id});"
+            queryInsertIntoInvoiceLineItems = InvoiceLineItemsDML.insertNewInvoiceLineItem(item[0], item[3], self.selected_company_id, newInvoiceID, product_id)
             self.cursor.execute(queryInsertIntoInvoiceLineItems)
             self.connection.commit()
 
-        queryInsertIntoProcesses = f"INSERT INTO Processes (company_id, customer_id, employee_id, invoice_id) VALUES ({self.selected_company_id}, {customer_id}, {self.employee_id}, {newInvoiceID});"
+        # queryInsertIntoProcesses = f"INSERT INTO Processes (company_id, customer_id, employee_id, invoice_id) VALUES ({self.selected_company_id}, {customer_id}, {self.employee_id}, {newInvoiceID});"
+        queryInsertIntoProcesses = ProcessDML.insertNewProcess(self.selected_company_id, customer_id, self.employee_id, newInvoiceID)
         self.cursor.execute(queryInsertIntoProcesses)
         self.connection.commit()
 
@@ -255,7 +268,8 @@ class GenerateInvoice:
         self.insertInvoiceItems(customer_id, billed_items)
 
         # Fetch necessary company details from the database
-        query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company_id};"
+        # query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company_id};"
+        query = CompanyDML.getCompanyInfoForBilling(self.selected_company_id)
         self.cursor.execute(query)
         company_details = self.cursor.fetchone()
 
@@ -347,7 +361,8 @@ class GenerateInvoice:
         c.setFont("Times-Bold", 8)
         c.drawCentredString(100, 55, "INVOICE")
 
-        queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};"
+        # queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};"
+        queryGetCustomerInfo = CustomerDML.getCustomerInfoForBilling(self.selected_company_id, customer_id)
         self.cursor.execute(queryGetCustomerInfo)
         customer_info = self.cursor.fetchone()
         customer_first_name, customer_last_name = customer_info
