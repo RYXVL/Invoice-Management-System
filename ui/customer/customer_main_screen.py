@@ -22,10 +22,10 @@ class CustomerMainScreen:
         self.invoice_entry = Entry(self.window, font=("times new roman", 14), state="readonly")
         self.invoice_entry.pack(pady=5)
 
-        Button(self.window, text="Submit", font=("times new roman", 14), command=self.print_invoice_id).pack(pady=10)
+        Button(self.window, text="Submit", font=("times new roman", 14), command=self.print_invoice_id, bg="#4f8fc0", fg="white").pack(pady=10)
 
         # Back button
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
         # Table for displaying invoice data
         self.invoice_table = ttk.Treeview(self.window, columns=("invoice_id", "invoice_date"), show="headings")

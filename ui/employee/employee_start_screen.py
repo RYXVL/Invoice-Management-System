@@ -25,22 +25,25 @@ class EmployeeScreen:
         Label(self.window, text="Select Company:", font=("times new roman", 14)).pack(pady=5)
         self.company_var = StringVar()
         self.company_dropdown = OptionMenu(self.window, self.company_var, *self.fetch_company_names())
-        self.company_dropdown.config(font=("times new roman", 12))
+        self.company_dropdown.config(font=("times new roman", 12), bg="#ffe3b3")  # c1 color
         self.company_dropdown.pack(pady=5)
 
-        Button(self.window, text="Login", font=("times new roman", 14), command=self.login_action).pack(pady=10)
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        # Login button (c3 color)
+        login_button = Button(self.window, text="Login", font=("times new roman", 14), command=self.login_action, bg="#4f8fc0", fg="white")
+        login_button.pack(pady=10)
+
+        # Back button (c4 color)
+        back_button = Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white")
+        back_button.pack(pady=10)
 
     def fetch_company_names(self):
         self.cursor.execute("SELECT company_id, company_name FROM Company")
         queryResult = self.cursor.fetchall()
-        # self.cursor.execute("SELECT company_name FROM Company")
         companyToID = {}
         for row in queryResult:
             companyToID[row[1]] = row[0]
         companies = [row[1] for row in queryResult]
         self.companyToID = companyToID
-        # companies = [row[0] for row in self.cursor.fetchall()]
         if companies:
             self.company_var.set(companies[0])  # Default selection if available
         return companies

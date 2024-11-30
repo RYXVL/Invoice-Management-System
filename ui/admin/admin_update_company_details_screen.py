@@ -12,6 +12,9 @@ class UpdateCompany:
         self.go_back_func = go_back_func
         self.root.title("Update Company Details")
 
+        # Maximize the window
+        self.root.state('zoomed')  # Maximizes the window
+
         # Frame for input
         self.input_frame = tk.Frame(self.root)
         self.input_frame.pack(padx=10, pady=10)
@@ -36,9 +39,13 @@ class UpdateCompany:
         # Pre-fill the fields with existing company data
         self.fetch_company_data()
 
-        # Update button
-        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_company).pack(pady=10)
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        # Update button with color (c3)
+        update_button = Button(self.root, text="Update", font=("times new roman", 14), command=self.update_company, bg="#4f8fc0", fg="white")
+        update_button.pack(pady=10)
+
+        # Back button with color (c4)
+        back_button = Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white")
+        back_button.pack(pady=10)
 
     def fetch_company_data(self):
         query = f"SELECT company_id, company_name, company_street_name, company_street_no, company_city, company_state, company_postal_code, company_country, company_email, company_phone_no FROM Company WHERE company_id = {self.selected_company_id};"

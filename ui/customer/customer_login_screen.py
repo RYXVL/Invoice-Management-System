@@ -23,11 +23,11 @@ class CustomerLoginScreen:
         Label(self.window, text="Select Company:", font=("times new roman", 14)).pack(pady=5)
         self.company_var = StringVar()
         self.company_dropdown = OptionMenu(self.window, self.company_var, *self.fetch_company_names())
-        self.company_dropdown.config(font=("times new roman", 12))
+        self.company_dropdown.config(font=("times new roman", 12), bg="#ffe3b3")  # Set dropdown color to c1
         self.company_dropdown.pack(pady=5)
 
-        Button(self.window, text="Login", font=("times new roman", 14), command=self.login_action).pack(pady=10)
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="Login", font=("times new roman", 14), command=self.login_action, bg="#4f8fc0", fg="white").pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
     def fetch_company_names(self):
         self.cursor.execute("SELECT company_id, company_name FROM Company")
@@ -42,14 +42,6 @@ class CustomerLoginScreen:
             self.company_var.set(companies[0])  # Set default selection
         return companies
 
-    # def login_action(self):
-    #     username = self.username_entry.get()
-    #     password = self.password_entry.get()
-    #     selected_company = self.company_var.get()
-    #     print(f"Login Username: {username}")
-    #     print(f"Login Password: {password}")
-    #     print(f"Selected Company: {selected_company}")
-    
     def login_action(self):
         username = self.username_entry.get()
         password = self.password_entry.get()

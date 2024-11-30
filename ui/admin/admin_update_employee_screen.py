@@ -11,6 +11,13 @@ class UpdateEmployee:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Update Employee Details")
+        
+        # Maximize the window
+        self.root.state('zoomed')
+
+        # Colors
+        c3 = "#4f8fc0"
+        c4 = "#26648e"
 
         # Frame for input
         self.input_frame = Frame(self.root)
@@ -34,17 +41,9 @@ class UpdateEmployee:
             self.entries[label] = entry
 
         # Add the "Is Admin" button below the input fields
-        # Add the "Is Admin" label and button on the same row
         Label(self.input_frame, text="Is Admin", font=("times new roman", 12)).grid(row=len(labels), column=0, sticky="w", pady=5, padx=5)
-        self.is_admin_button = tk.Button(self.input_frame, text="False", font=("times new roman", 12), command=self.toggle_is_admin)
+        self.is_admin_button = tk.Button(self.input_frame, text="False", font=("times new roman", 12), command=self.toggle_is_admin, bg=c3)
         self.is_admin_button.grid(row=len(labels), column=1, pady=5, padx=5)
-
-
-
-        # Is Admin Button
-        # self.is_admin_button = Button(self.input_frame, text="False", font=("times new roman", 12),
-                                    #    command=self.toggle_is_admin, width=10)
-        # self.is_admin_button.grid(row=len(labels), column=1, pady=5, padx=5)
 
         # Table for displaying employee data
         self.treeview = ttk.Treeview(
@@ -75,8 +74,8 @@ class UpdateEmployee:
         self.load_employees()
 
         # Update and Back buttons
-        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_employee).grid(row=2, column=0, pady=10, sticky="w", padx=10)
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).grid(row=2, column=0, pady=10, sticky="e", padx=10)
+        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_employee, bg=c3).grid(row=2, column=0, pady=10, sticky="w", padx=10)
+        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back, bg=c4).grid(row=2, column=0, pady=10, sticky="e", padx=10)
 
     def toggle_is_admin(self):
         # Toggle between True and False
@@ -115,7 +114,6 @@ class UpdateEmployee:
         # Set the Is Admin button text based on the selected row's value
         is_admin_value = selected_data[-1]  # Last column corresponds to is_admin
         self.is_admin_button.config(text="True" if str(is_admin_value) == "1" else "False")
-
 
     def update_employee(self):
         # Collect field values

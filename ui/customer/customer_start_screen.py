@@ -15,9 +15,9 @@ class CustomerScreen:
         
         Label(self.window, text="Customer Screen", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
 
-        Button(self.window, text="Signup", font=("times new roman", 14), command=self.open_signup).pack(pady=10)
-        Button(self.window, text="Login", font=("times new roman", 14), command=self.open_login).pack(pady=10)
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="Signup", font=("times new roman", 14), command=self.open_signup, bg="#4f8fc0", fg="white").pack(pady=10)
+        Button(self.window, text="Login", font=("times new roman", 14), command=self.open_login, bg="#4f8fc0", fg="white").pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
     def go_back(self):
         self.window.destroy()

@@ -24,16 +24,16 @@ class AdminMenu:
         Label(self.window, text="Admin Menu", font=("times new roman", 24, "bold")).pack(pady=10)
 
         # Add buttons with commands to open corresponding screens
-        Button(self.window, text="Add Product", font=("times new roman", 14), command=self.open_add_product).pack(pady=5)
-        Button(self.window, text="Remove Product", font=("times new roman", 14), command=self.open_delete_product).pack(pady=5)
-        Button(self.window, text="Create Employee", font=("times new roman", 14), command=self.open_add_employee).pack(pady=5)
-        Button(self.window, text="Delete Employee", font=("times new roman", 14), command=self.open_delete_employee).pack(pady=5)
-        Button(self.window, text="Delete Customer", font=("times new roman", 14), command=self.open_delete_customer).pack(pady=5)
-        Button(self.window, text="Update Company Details", font=("times new roman", 14), command=self.open_update_company).pack(pady=5)
-        Button(self.window, text="Update Customer", font=("times new roman", 14), command=self.open_update_customer).pack(pady=5)
-        Button(self.window, text="Update Employee", font=("times new roman", 14), command=self.open_update_employee).pack(pady=5)
+        Button(self.window, text="Add Product", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_add_product).pack(pady=5)
+        Button(self.window, text="Remove Product", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_delete_product).pack(pady=5)
+        Button(self.window, text="Create Employee", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_add_employee).pack(pady=5)
+        Button(self.window, text="Delete Employee", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_delete_employee).pack(pady=5)
+        Button(self.window, text="Delete Customer", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_delete_customer).pack(pady=5)
+        Button(self.window, text="Update Company Details", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_update_company).pack(pady=5)
+        Button(self.window, text="Update Customer", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_update_customer).pack(pady=5)
+        Button(self.window, text="Update Employee", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.open_update_employee).pack(pady=5)
 
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def go_back(self):
         self.window.destroy()

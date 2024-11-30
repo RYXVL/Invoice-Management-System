@@ -18,9 +18,17 @@ class EmployeeMenu:
         
         Label(self.window, text="Employee Menu", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
 
-        Button(self.window, text="Generate Invoice", font=("times new roman", 14), command=self.open_generate_invoice).pack(pady=10)
-        Button(self.window, text="View Invoice", font=("times new roman", 14), command=self.open_view_invoice).pack(pady=10)
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        # Generate Invoice button (c3 color)
+        generate_invoice_button = Button(self.window, text="Generate Invoice", font=("times new roman", 14), command=self.open_generate_invoice, bg="#4f8fc0", fg="white")
+        generate_invoice_button.pack(pady=10)
+
+        # View Invoice button (c3 color)
+        view_invoice_button = Button(self.window, text="View Invoice", font=("times new roman", 14), command=self.open_view_invoice, bg="#4f8fc0", fg="white")
+        view_invoice_button.pack(pady=10)
+
+        # Back button (c4 color)
+        back_button = Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white")
+        back_button.pack(pady=10)
 
     def open_generate_invoice(self):
         self.window.withdraw()  # Hide the Employee Menu

@@ -11,6 +11,7 @@ class AddEmployee:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Add Employee")
+        self.root.state("zoomed")  # Set window to open in full screen
 
         # Create a frame for grid layout
         self.input_frame = tk.Frame(self.root)
@@ -45,8 +46,8 @@ class AddEmployee:
         self.is_admin_button.grid(row=row, column=1, padx=5, pady=5, sticky="w")
 
         # Buttons for actions
-        Button(self.root, text="Create Employee", font=("times new roman", 14), command=self.create_employee).pack(pady=10)
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.root, text="Create Employee", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.create_employee).pack(pady=10)
+        Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def toggle_is_admin(self):
         """Toggle the is_admin value between True and False."""
@@ -61,11 +62,7 @@ class AddEmployee:
         newEmployeeID = (max_id_result + 1) if max_id_result else 1
         employee_data = {field: entry.get() for field, entry in self.entries.items()}
         employee_data["Is Admin"] = self.is_admin_value.get()
-        # """Collect input data and print it."""
-        insertEmployeeQuery = f"INSERT INTO Employee (employee_user_name, employee_password, employee_id, employee_first_name,employee_last_name, employee_email, employee_phone_no, employee_hire_date, employee_street_name, employee_street_no, employee_city, employee_state, employee_postal_code, employee_country, company_id, is_admin) VALUES (\"{employee_data['Employee Username']}\", \"{employee_data['Employee Password']}\", {newEmployeeID}, \"{employee_data['Employee First Name']}\", \"{employee_data['Employee Last Name']}\", \"{employee_data['Employee Email']}\", \"{employee_data['Employee Phone No']}\", \"{employee_data['Employee Hire Date']}\", \"{employee_data['Employee Street Name']}\", {employee_data['Employee Street No']}, \"{employee_data['Employee City']}\", \"{employee_data['Employee State']}\", \"{employee_data['Employee Postal Code']}\", \"{employee_data['Employee Country']}\", {self.selected_company_id}, {employee_data['Is Admin']});"
-        # print("Employee Data:")
-        # for key, value in employee_data.items():
-        #     print(f"{key}: {value}")
+        insertEmployeeQuery = f"INSERT INTO Employee (employee_user_name, employee_password, employee_id, employee_first_name, employee_last_name, employee_email, employee_phone_no, employee_hire_date, employee_street_name, employee_street_no, employee_city, employee_state, employee_postal_code, employee_country, company_id, is_admin) VALUES (\"{employee_data['Employee Username']}\", \"{employee_data['Employee Password']}\", {newEmployeeID}, \"{employee_data['Employee First Name']}\", \"{employee_data['Employee Last Name']}\", \"{employee_data['Employee Email']}\", \"{employee_data['Employee Phone No']}\", \"{employee_data['Employee Hire Date']}\", \"{employee_data['Employee Street Name']}\", {employee_data['Employee Street No']}, \"{employee_data['Employee City']}\", \"{employee_data['Employee State']}\", \"{employee_data['Employee Postal Code']}\", \"{employee_data['Employee Country']}\", {self.selected_company_id}, {employee_data['Is Admin']});"
         self.cursor.execute(insertEmployeeQuery)
         self.connection.commit()
 
@@ -77,5 +74,4 @@ class AddEmployee:
 # if __name__ == "__main__":
 #     root = tk.Tk()
 #     app = AddEmployee(root, cursor=None, go_back_func=None, selected_company_id=1, connection=None)
-#     root.geometry("600x400")
 #     root.mainloop()

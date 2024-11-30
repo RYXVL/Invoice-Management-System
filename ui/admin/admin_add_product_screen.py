@@ -14,6 +14,10 @@ class AddProduct:
         self.go_back_func = go_back_func
         self.root.title("Add Product")
 
+        # Set window size to 1500x1000
+        # self.root.geometry("1500x1000")
+        self.root.state("zoomed")
+
         # Frame for entry and label
         self.input_frame = tk.Frame(self.root)
         self.input_frame.pack(pady=5)
@@ -65,14 +69,13 @@ class AddProduct:
 
         # Adjust the window size to fit the table
         self.tree.pack(expand=True, fill="both")
-        self.root.geometry(f"{table_width}x{table_height + 120}")
 
         # "Add" button below the table
-        self.add_button = tk.Button(self.root, text="Add Product", font=("times new roman", 14), command=self.add_item)
+        self.add_button = tk.Button(self.root, text="Add Product", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.add_item)
         self.add_button.pack(pady=10)
 
         # "Back" button
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def load_data(self):
         # Query the database to load the current products into the treeview

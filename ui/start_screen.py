@@ -12,14 +12,14 @@ class StartScreen:
         self.root.title("Invoice Management System")
         self.root.geometry("750x800")
 
-        self.frame = Frame(self.root, bg="#121212")
+        self.frame = Frame(self.root, bg="#ffffff")
         self.frame.place(x=80, y=20, width=600, height=700)
 
-        Label(self.frame, text="Invoice Management System", font=("times new roman", 30, "bold"), bg="#4d4988", fg="white").place(width=600, height=75)
+        Label(self.frame, text="Invoice Management System", font=("times new roman", 30, "bold"), bg="#ffe3b3", fg="white").place(width=600, height=75)
 
-        Button(self.frame, text="Admin", font=("times new roman", 14), fg="white", bg="#B00857", command=self.open_admin_screen).place(x=200, y=200, width=200, height=50)
-        Button(self.frame, text="Employee", font=("times new roman", 14), fg="white", bg="#B00857", command=self.open_employee_screen).place(x=200, y=300, width=200, height=50)
-        Button(self.frame, text="Customer", font=("times new roman", 14), fg="white", bg="#B00857", command=self.open_customer_screen).place(x=200, y=400, width=200, height=50)
+        Button(self.frame, text="Admin", font=("times new roman", 14), fg="white", bg="#4f8fc0", command=self.open_admin_screen).place(x=200, y=200, width=200, height=50)
+        Button(self.frame, text="Employee", font=("times new roman", 14), fg="white", bg="#4f8fc0", command=self.open_employee_screen).place(x=200, y=300, width=200, height=50)
+        Button(self.frame, text="Customer", font=("times new roman", 14), fg="white", bg="#4f8fc0", command=self.open_customer_screen).place(x=200, y=400, width=200, height=50)
 
     def hide(self):
         self.root.withdraw()

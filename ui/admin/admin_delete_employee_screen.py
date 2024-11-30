@@ -12,6 +12,7 @@ class DeleteEmployee:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Delete Employee")
+        self.root.state("zoomed")  # Set window to open in full screen
 
         # Employee Table with updated columns
         self.employee_table = ttk.Treeview(
@@ -38,8 +39,8 @@ class DeleteEmployee:
         self.employee_id_entry.pack(pady=5)
 
         # Buttons
-        Button(self.root, text="Delete Employee", font=("times new roman", 14), command=self.delete_employee).pack(pady=10)
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.root, text="Delete Employee", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.delete_employee).pack(pady=10)
+        Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
         # Bind row selection event
         self.employee_table.bind("<<TreeviewSelect>>", self.on_row_select)

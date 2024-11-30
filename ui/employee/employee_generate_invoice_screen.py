@@ -15,7 +15,8 @@ class GenerateInvoice:
         self.employee_id = employee_id
         print(f"GenerateInvoice: {self.selected_company_id}")
         self.window.title("Generate Invoice")
-        self.window.geometry("600x800")
+        # self.window.geometry("600x800")
+        self.window.state("zoomed")
         
         Label(self.window, text="Generate Invoice", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
 
@@ -38,7 +39,7 @@ class GenerateInvoice:
         self.quantity_entry.grid(row=0, column=3, padx=5, pady=5)
 
         # Add button
-        self.add_button = Button(self.input_frame, text="Add", font=("times new roman", 12), command=self.add_item)
+        self.add_button = Button(self.input_frame, text="Add", font=("times new roman", 12), command=self.add_item, bg="#53d2dc", fg="white")
         self.add_button.grid(row=0, column=4, padx=10, pady=5)
 
         # Frame for the product table
@@ -96,12 +97,12 @@ class GenerateInvoice:
             self.billed_treeview.column(col, width=120, anchor="center")
 
         # Add Delete Added Item button
-        Button(self.window, text="Delete Added Item", font=("times new roman", 12), command=self.delete_item).pack(pady=10)
+        Button(self.window, text="Delete Added Item", font=("times new roman", 12), command=self.delete_item, bg="#53d2dc", fg="white").pack(pady=10)
 
-        Button(self.window, text="Generate Invoice", font=("times new roman", 14), command=self.generate_invoice).pack(pady=10)
+        Button(self.window, text="Generate Invoice", font=("times new roman", 14), command=self.generate_invoice, bg="#4f8fc0", fg="white").pack(pady=10)
 
         # Add Back button
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
         # Serial number for billed items
         self.serial_number = 1

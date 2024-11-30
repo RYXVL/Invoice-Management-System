@@ -22,8 +22,8 @@ class ViewInvoice:
         self.invoice_id_entry = Entry(self.window, font=("times new roman", 14))
         self.invoice_id_entry.pack(pady=5)
 
-        Button(self.window, text="View Invoice", font=("times new roman", 14), command=self.view_invoice).pack(pady=10)
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="View Invoice", font=("times new roman", 14), command=self.view_invoice, bg="#4f8fc0", fg="white").pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
     def generate_invoice(self, invoice_id):
         # customer_id = self.customer_id_entry.get()

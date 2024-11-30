@@ -25,11 +25,11 @@ class AdminScreen:
         Label(self.window, text="Select Company:", font=("times new roman", 14)).pack(pady=5)
         self.company_var = StringVar()
         self.company_dropdown = OptionMenu(self.window, self.company_var, *self.fetch_company_names())
-        self.company_dropdown.config(font=("times new roman", 12))
+        self.company_dropdown.config(font=("times new roman", 12), bg="#ffe3b3")
         self.company_dropdown.pack(pady=5)
 
-        Button(self.window, text="Login", font=("times new roman", 14), command=self.login_action).pack(pady=10)
-        Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.window, text="Login", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.login_action).pack(pady=10)
+        Button(self.window, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def fetch_company_names(self):
         self.cursor.execute("SELECT company_id, company_name FROM Company")

@@ -12,9 +12,7 @@ class DeleteProduct:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Delete Product")
-
-        # # Fetch the products for the selected company
-        # self.fetch_products()
+        self.root.state("zoomed")  # Set window to open in full screen
 
         # Frame for product ID and table
         self.input_frame = tk.Frame(self.root)
@@ -39,12 +37,12 @@ class DeleteProduct:
         self.fetch_products()
 
         # Delete and Back buttons
-        Button(self.root, text="Delete Product", font=("times new roman", 14), command=self.delete_product).pack(pady=10)
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.root, text="Delete Product", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.delete_product).pack(pady=10)
+        Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def fetch_products(self):
         """Fetch products based on the selected company_id and populate the table."""
-        self.cursor.execute(f"SELECT p.product_id, p.product_price, p.product_quantity, p.item_name, b.brand_name FROM product AS p natural join brand AS b where p.company_id = {self.selected_company_id};")
+        self.cursor.execute(f"SELECT p.product_id, p.product_price, p.product_quantity, p.item_name, b.brand_name FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {self.selected_company_id};")
         products = self.cursor.fetchall()
 
         # Clear the table before populating new data
@@ -82,5 +80,4 @@ class DeleteProduct:
 #     root = tk.Tk()
 #     # Assuming cursor and connection are already established
 #     app = DeleteProduct(root, cursor=None, go_back_func=None, selected_company_id=1, connection=None)
-#     root.geometry("600x400")
 #     root.mainloop()

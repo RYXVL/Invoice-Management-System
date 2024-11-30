@@ -12,6 +12,7 @@ class DeleteCustomer:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Delete Customer")
+        self.root.state("zoomed")  # Set window to open in full screen
 
         # Customer Table
         self.customer_table = ttk.Treeview(
@@ -36,8 +37,8 @@ class DeleteCustomer:
         self.customer_id_entry.pack(pady=5)
 
         # Buttons
-        Button(self.root, text="Delete Customer", font=("times new roman", 14), command=self.delete_customer).pack(pady=10)
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).pack(pady=10)
+        Button(self.root, text="Delete Customer", font=("times new roman", 14), bg="#4f8fc0", fg="white", command=self.delete_customer).pack(pady=10)
+        Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
         # Bind row selection event
         self.customer_table.bind("<<TreeviewSelect>>", self.on_row_select)

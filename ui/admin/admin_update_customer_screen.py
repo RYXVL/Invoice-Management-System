@@ -12,6 +12,9 @@ class UpdateCustomer:
         self.go_back_func = go_back_func
         self.root.title("Update Customer Details")
 
+        # Maximize the window
+        self.root.state('zoomed')
+
         # Frame for input
         self.input_frame = tk.Frame(self.root)
         self.input_frame.grid(row=0, column=0, padx=10, pady=10)  # Use grid instead of pack for input frame
@@ -68,10 +71,10 @@ class UpdateCustomer:
         self.load_customers()
 
         # Update button
-        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_customer).grid(row=3, column=0, pady=10, sticky="w", padx=10)
+        Button(self.root, text="Update", font=("times new roman", 14), command=self.update_customer, bg="#4f8fc0", fg="white").grid(row=3, column=0, pady=10, sticky="w", padx=10)
 
         # Back button
-        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back).grid(row=3, column=1, pady=10, sticky="e", padx=10)
+        Button(self.root, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").grid(row=3, column=1, pady=10, sticky="e", padx=10)
 
     def load_customers(self):
         # Clear the existing data in the table
@@ -159,8 +162,6 @@ class UpdateCustomer:
                 entry.config(state="readonly")  # Set it back to readonly after clearing
             else:
                 entry.delete(0, tk.END)  # Clear text for other fields
-
-
 
     def go_back(self):
         self.root.destroy()
