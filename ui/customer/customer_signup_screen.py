@@ -5,6 +5,7 @@ from tkinter import Toplevel, Label, Button, StringVar, OptionMenu
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu, Entry, Canvas, Frame, Scrollbar
 from ui.customer.customer_main_screen import CustomerMainScreen
 from dml.customer_dml import CustomerDML
+from dml.company_dml import CompanyDML
 
 class CustomerSignupScreen:
     def __init__(self, customer_screen, cursor, connection):
@@ -73,7 +74,7 @@ class CustomerSignupScreen:
         setattr(self, f"{attribute}_entry", entry)
 
     def fetch_company_names(self):
-        self.cursor.execute("SELECT company_id, company_name FROM Company")
+        self.cursor.execute(CompanyDML.getBasicInfoAllCompanies())
         queryResult = self.cursor.fetchall()
         companyToID = {}
         for row in queryResult:
@@ -104,7 +105,7 @@ class CustomerSignupScreen:
         company_id = self.get_company_id(company_name)
 
         # Generate new customer_id
-        self.cursor.execute(f"SELECT MAX(customer_id) FROM Customer WHERE company_id = {company_id}")
+        self.cursor.execute(CustomerDML.getMaxCustomerIDOfACompany(company_id))
         max_id_result = self.cursor.fetchone()[0]
         customer_id = (max_id_result + 1) if max_id_result else 1
 

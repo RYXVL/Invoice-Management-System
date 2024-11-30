@@ -5,6 +5,10 @@ import tkinter as tk
 from tkinter import Toplevel, Label, Button, Entry, messagebox
 from reportlab.pdfgen import canvas
 from datetime import date
+from dml.common_dml import CommonDML
+from dml.company_dml import CompanyDML
+from dml.customer_dml import CustomerDML
+from dml.processes_dml import ProcessDML
 
 class CustomerMainScreen:
     def __init__(self, root, login_screen, customer_id, cursor,selected_company):
@@ -40,14 +44,16 @@ class CustomerMainScreen:
 
     def populate_table(self):
         # Query the database to get invoices for the customer
-        query = f"""
-        SELECT DISTINCT invoice.invoice_id, invoice_date 
-        FROM invoice 
-        JOIN processes 
-        ON invoice.invoice_id = processes.invoice_id 
-        WHERE customer_id = %s
-        """
-        self.cursor.execute(query, (self.customer_id,))
+        # query = f"""
+        # SELECT DISTINCT invoice.invoice_id, invoice_date 
+        # FROM invoice 
+        # JOIN processes 
+        # ON invoice.invoice_id = processes.invoice_id 
+        # WHERE customer_id = %s
+        # """
+        query = CommonDML.getInvoicesOfACustomerOfACompany(self.selected_company, self.customer_id)
+        # self.cursor.execute(query, (self.customer_id,))
+        self.cursor.execute(query)
         rows = self.cursor.fetchall()
 
         # Insert data into the table
@@ -81,7 +87,8 @@ class CustomerMainScreen:
 
         # Prepare the list of items for the invoice
 
-        queryGetInvoiceItems = f"select invoice_item_id, item_name, product_price, invoice_item_quantity, product_price * invoice_item_quantity as price from invoice natural join invoice_line_items natural join product where invoice_id = {invoice_id};"
+        # queryGetInvoiceItems = f"select invoice_item_id, item_name, product_price, invoice_item_quantity, product_price * invoice_item_quantity as price from invoice natural join invoice_line_items natural join product where invoice_id = {invoice_id};"
+        queryGetInvoiceItems = CommonDML.getInvoiceItems(invoice_id)
         self.cursor.execute(queryGetInvoiceItems)
         result = self.cursor.fetchall()
 
@@ -99,13 +106,15 @@ class CustomerMainScreen:
         # self.insertInvoiceItems(customer_id, billed_items)
 
         # Fetch necessary company details from the database
-        query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company};"
+        # query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company};"
+        query = CompanyDML.getCompanyInfoForBilling(self.selected_company)
         self.cursor.execute(query)
         company_details = self.cursor.fetchone()
         company_name, address, city, contact_number = company_details
         # print(f"Customer ID: {customer_id}")
         # print(billed_items)
-        queryGetCustomerID = f"select customer_id from processes where invoice_id = {invoice_id};"
+        # queryGetCustomerID = f"select customer_id from processes where invoice_id = {invoice_id};"
+        queryGetCustomerID = ProcessDML.getCustomerIdOfAnInvoice(invoice_id)
         self.cursor.execute(queryGetCustomerID)
         customer_id = self.cursor.fetchone()[0]
         customer_id = str(customer_id)
@@ -194,7 +203,8 @@ class CustomerMainScreen:
         c.setFont("Times-Bold", 8)
         c.drawCentredString(100, 55, "INVOICE")
 
-        queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company};"
+        # queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company};"
+        queryGetCustomerInfo = CustomerDML.getCustomerInfoForBilling(self.selected_company, customer_id)
         self.cursor.execute(queryGetCustomerInfo)
         customer_info = self.cursor.fetchone()
         customer_first_name, customer_last_name = customer_info

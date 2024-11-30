@@ -54,3 +54,15 @@ class CustomerDML:
             WHERE customer_id = {customer_id} 
             AND company_id = {company_id}
         """
+    
+    @staticmethod
+    def getMaxCustomerIDOfACompany(company_id):
+        return f"SELECT MAX(customer_id) FROM Customer WHERE company_id = {company_id};"
+    
+    @staticmethod
+    def getCustomerPasswordOfACompany(company_id, username):
+        return f"SELECT customer_password FROM customer WHERE company_id = {company_id} AND customer_user_name =  '{username}';"
+    
+    @staticmethod
+    def getCustomerIDOfACompany(company_id, username):
+        return f"SELECT customer_id FROM customer WHERE company_id = {company_id} AND customer_user_name =  '{username}';"

@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu
 from ui.customer.customer_main_screen import CustomerMainScreen
+from dml.company_dml import CompanyDML
+from dml.customer_dml import CustomerDML
 
 class CustomerLoginScreen:
     def __init__(self, customer_screen, cursor):
@@ -30,7 +32,7 @@ class CustomerLoginScreen:
         Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
     def fetch_company_names(self):
-        self.cursor.execute("SELECT company_id, company_name FROM Company")
+        self.cursor.execute(CompanyDML.getBasicInfoAllCompanies())
         queryResult = self.cursor.fetchall()
         print(queryResult)
         companyToID = {}
@@ -46,7 +48,8 @@ class CustomerLoginScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
-        self.cursor.execute(f"SELECT customer_password FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+        # self.cursor.execute(f"SELECT customer_password FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+        self.cursor.execute(CustomerDML.getCustomerPasswordOfACompany(self.companyToID[selected_company], username))
         result = self.cursor.fetchall()
         if len(result) == 0:
             print("Invalid company ID or username!")
@@ -54,7 +57,8 @@ class CustomerLoginScreen:
         if password != result[0][0]:
             print("Wrong password entered!")
             return
-        self.cursor.execute(f"SELECT customer_id FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+        # self.cursor.execute(f"SELECT customer_id FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+        self.cursor.execute(CustomerDML.getCustomerIDOfACompany(self.companyToID[selected_company], username))
         customer_id = self.cursor.fetchone()[0]       
         print(f"Username: {username}")
         print(f"Password: {password}")

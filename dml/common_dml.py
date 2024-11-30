@@ -20,3 +20,13 @@ class CommonDML:
     @staticmethod
     def getProductsOfACompany(company_id):
         return f"SELECT p.product_id, p.item_name, b.brand_name, p.product_price, p.product_quantity FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {company_id} and p.product_quantity != 0;"
+    
+    @staticmethod
+    def getInvoicesOfACustomerOfACompany(company_id, customer_id):
+        return f"""
+            SELECT DISTINCT invoice.invoice_id, invoice_date 
+            FROM invoice 
+            JOIN processes 
+            ON invoice.invoice_id = processes.invoice_id 
+            WHERE customer_id = {customer_id} and company_id = {company_id};
+        """
