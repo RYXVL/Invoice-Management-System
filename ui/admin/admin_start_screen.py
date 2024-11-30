@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu
 from ui.admin.admin_menu import AdminMenu
+from dml.company_dml import CompanyDML
+from dml.employee_dml import EmployeeDML
 
 class AdminScreen:
 
@@ -32,7 +34,7 @@ class AdminScreen:
         Button(self.window, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def fetch_company_names(self):
-        self.cursor.execute("SELECT company_id, company_name FROM Company")
+        self.cursor.execute(CompanyDML.getBasicInfoAllCompanies())
         queryResult = self.cursor.fetchall()
         print(queryResult)
         companyToID = {}
@@ -52,7 +54,8 @@ class AdminScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
-        self.cursor.execute(f"SELECT employee_password FROM employee WHERE company_id = {self.companyToID[selected_company]} AND employee_user_name =  '{username}' AND is_admin = 1;")
+        # self.cursor.execute(f"SELECT employee_password FROM employee WHERE company_id = {self.companyToID[selected_company]} AND employee_user_name =  '{username}' AND is_admin = 1;")
+        self.cursor.execute(EmployeeDML.getAdminPassword(username, self.companyToID[selected_company]))
         result = self.cursor.fetchall()
         if len(result) == 0:
             print("Invalid company ID, username or no admin access!")

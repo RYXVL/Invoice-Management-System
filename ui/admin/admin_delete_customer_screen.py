@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Toplevel, Label, Button
+from dml.customer_dml import CustomerDML
 
 class DeleteCustomer:
 
@@ -48,8 +49,9 @@ class DeleteCustomer:
         for row in self.customer_table.get_children():
             self.customer_table.delete(row)  # Clear existing rows
 
-        query = f"SELECT customer_id, customer_user_name, customer_first_name, customer_last_name, customer_email, customer_phone_no FROM Customer WHERE company_id = {self.selected_company_id};"
-        self.cursor.execute(query)
+        # query = f"SELECT customer_id, customer_user_name, customer_first_name, customer_last_name, customer_email, customer_phone_no FROM Customer WHERE company_id = {self.selected_company_id};"
+        # self.cursor.execute(query)
+        self.cursor.execute(CustomerDML.getBasicInfoAllCustomers(self.selected_company_id))
         customers = self.cursor.fetchall()
         for customer in customers:
             self.customer_table.insert("", "end", values=customer)
@@ -68,7 +70,8 @@ class DeleteCustomer:
         """Delete selected customer and refresh the table."""
         customer_id = self.customer_id_entry.get()
         if customer_id:
-            self.cursor.execute(f"DELETE FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};")
+            # self.cursor.execute(f"DELETE FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};")
+            self.cursor.execute(CustomerDML.deleteCustomer(customer_id, self.selected_company_id))
             self.connection.commit()
             self.fetch_customers()
             self.customer_id_entry.config(state="normal")

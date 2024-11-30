@@ -1,5 +1,6 @@
 from tkinter import Toplevel, Label, Button, ttk, Frame, Entry
 import tkinter as tk
+from dml.employee_dml import EmployeeDML
 
 class UpdateEmployee:
 
@@ -88,7 +89,7 @@ class UpdateEmployee:
             self.treeview.delete(row)
 
         # Fetch employee details from the database
-        self.cursor.execute(f"SELECT employee_id, employee_user_name, employee_password, employee_first_name, employee_last_name, employee_email, employee_phone_no, employee_hire_date, employee_street_name, employee_street_no, employee_city, employee_state, employee_postal_code, employee_country, is_admin FROM Employee WHERE company_id = {self.selected_company_id};")
+        self.cursor.execute(EmployeeDML.getAllInfoOfAllEmployeesOfACompany(self.selected_company_id))
         rows = self.cursor.fetchall()
 
         # Insert rows into the table
@@ -120,17 +121,38 @@ class UpdateEmployee:
         details = {label: entry.get() for label, entry in self.entries.items()}
         is_admin = 1 if self.is_admin_button.cget("text") == "True" else 0
 
-        self.cursor.execute(f"""
-            UPDATE Employee 
-            SET employee_user_name = '{details["Username"]}', employee_password = '{details["Password"]}', 
-                employee_first_name = '{details["First Name"]}', employee_last_name = '{details["Last Name"]}', 
-                employee_email = '{details["Email"]}', employee_phone_no = '{details["Phone No"]}', 
-                employee_street_name = '{details["Street Name"]}', employee_street_no = '{details["Street No"]}', 
-                employee_city = '{details["City"]}', employee_state = '{details["State"]}', 
-                employee_postal_code = '{details["Postal Code"]}', employee_country = '{details["Country"]}', 
-                is_admin = {is_admin}, employee_hire_date = '{details["Hire Date"]}'
-            WHERE employee_id = '{details["Employee ID"]}' AND company_id = '{self.selected_company_id}'
-        """)
+        update_query = EmployeeDML.updateAllFieldsOfAnEmployee(
+            self.selected_company_id,
+            details["Employee ID"],
+            details["Username"],
+            details["Password"],
+            details["First Name"],
+            details["Last Name"],
+            details["Email"],
+            details["Phone No"],
+            details["Street Name"],
+            details["Street No"],
+            details["City"],
+            details["State"],
+            details["Postal Code"],
+            details["Country"],
+            is_admin,
+            details["Hire Date"]
+        )
+
+        # self.cursor.execute(f"""
+        #     UPDATE Employee 
+        #     SET employee_user_name = '{details["Username"]}', employee_password = '{details["Password"]}', 
+        #         employee_first_name = '{details["First Name"]}', employee_last_name = '{details["Last Name"]}', 
+        #         employee_email = '{details["Email"]}', employee_phone_no = '{details["Phone No"]}', 
+        #         employee_street_name = '{details["Street Name"]}', employee_street_no = '{details["Street No"]}', 
+        #         employee_city = '{details["City"]}', employee_state = '{details["State"]}', 
+        #         employee_postal_code = '{details["Postal Code"]}', employee_country = '{details["Country"]}', 
+        #         is_admin = {is_admin}, employee_hire_date = '{details["Hire Date"]}'
+        #     WHERE employee_id = '{details["Employee ID"]}' AND company_id = '{self.selected_company_id}'
+        # """)
+
+        self.cursor.execute(update_query)
 
         self.connection.commit()
 

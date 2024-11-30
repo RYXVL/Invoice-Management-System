@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, messagebox
+from dml.company_dml import CompanyDML
 
 class UpdateCompany:
 
@@ -48,8 +49,8 @@ class UpdateCompany:
         back_button.pack(pady=10)
 
     def fetch_company_data(self):
-        query = f"SELECT company_id, company_name, company_street_name, company_street_no, company_city, company_state, company_postal_code, company_country, company_email, company_phone_no FROM Company WHERE company_id = {self.selected_company_id};"
-        self.cursor.execute(query)
+        # query = f"SELECT company_id, company_name, company_street_name, company_street_no, company_city, company_state, company_postal_code, company_country, company_email, company_phone_no FROM Company WHERE company_id = {self.selected_company_id};"
+        self.cursor.execute(CompanyDML.getAllInfoOfACompany(self.selected_company_id))
         company_data = self.cursor.fetchone()
 
         if company_data:
@@ -65,19 +66,9 @@ class UpdateCompany:
         details = {label: entry.get() for label, entry in self.entries.items()}
 
         try:
-            update_query = f"""
-                UPDATE Company 
-                SET company_name = '{details["Name"]}', 
-                    company_street_name = '{details["Street Name"]}', 
-                    company_street_no = '{details["Street No"]}', 
-                    company_city = '{details["City"]}', 
-                    company_state = '{details["State"]}', 
-                    company_postal_code = '{details["Postal Code"]}', 
-                    company_country = '{details["Country"]}', 
-                    company_email = '{details["Email"]}', 
-                    company_phone_no = '{details["Phone No"]}'
-                WHERE company_id = {details["Company ID"]}
-                """
+            update_query = CompanyDML.updateAllFieldsOfACompany(details["Company ID"], details["Name"], details["Street Name"], details["Street No"], details["City"], details["State"], details["Postal Code"], details["Country"], details["Email"], details["Phone No"])
+                # WHERE company_id = {details["Company ID"]}
+                # """
             self.cursor.execute(update_query)
             self.connection.commit()
             messagebox.showinfo("Success", "Company details updated successfully!")

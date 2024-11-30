@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Toplevel, Label, Button
+from dml.employee_dml import EmployeeDML
 
 class DeleteEmployee:
 
@@ -50,8 +51,8 @@ class DeleteEmployee:
         for row in self.employee_table.get_children():
             self.employee_table.delete(row)  # Clear existing rows
 
-        query = f"SELECT employee_id, employee_user_name, employee_first_name, employee_last_name, employee_email, employee_phone_no, employee_hire_date, is_admin FROM Employee WHERE company_id = {self.selected_company_id};"
-        self.cursor.execute(query)
+        # query = f"SELECT employee_id, employee_user_name, employee_first_name, employee_last_name, employee_email, employee_phone_no, employee_hire_date, is_admin FROM Employee WHERE company_id = {self.selected_company_id};"
+        self.cursor.execute(EmployeeDML.getBasicInfoAllEmployees(self.selected_company_id))
         employees = self.cursor.fetchall()
         for employee in employees:
             self.employee_table.insert("", "end", values=employee)
@@ -70,7 +71,7 @@ class DeleteEmployee:
         """Delete selected employee and refresh the table."""
         employee_id = self.employee_id_entry.get()
         if employee_id:
-            self.cursor.execute(f"DELETE FROM Employee WHERE employee_id = {employee_id} AND company_id = {self.selected_company_id};")
+            self.cursor.execute(EmployeeDML.deleteEmployee(employee_id, self.selected_company_id))
             self.connection.commit()
             self.fetch_employees()
             self.employee_id_entry.config(state="normal")

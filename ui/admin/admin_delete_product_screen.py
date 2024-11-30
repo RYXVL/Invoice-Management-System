@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Toplevel, Label, Button
+from dml.product_dml import ProductDML
 
 class DeleteProduct:
 
@@ -42,7 +43,7 @@ class DeleteProduct:
 
     def fetch_products(self):
         """Fetch products based on the selected company_id and populate the table."""
-        self.cursor.execute(f"SELECT p.product_id, p.product_price, p.product_quantity, p.item_name, b.brand_name FROM product AS p NATURAL JOIN brand AS b WHERE p.company_id = {self.selected_company_id};")
+        self.cursor.execute(ProductDML.getBasicInfoAllProducts(self.selected_company_id))
         products = self.cursor.fetchall()
 
         # Clear the table before populating new data
@@ -66,7 +67,7 @@ class DeleteProduct:
         """Delete the selected product from the database."""
         product_id = self.product_id_entry.get()
         if product_id:
-            self.cursor.execute(f"DELETE FROM Product WHERE product_id = {product_id} AND company_id = {self.selected_company_id}")
+            self.cursor.execute(ProductDML.deleteProduct(product_id, self.selected_company_id))
             self.connection.commit()
             self.fetch_products()  # Refresh the product table
             self.product_id_entry.delete(0, tk.END)  # Clear the product ID entry

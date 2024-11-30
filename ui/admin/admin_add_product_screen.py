@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, Toplevel, Button
 from dml.common_dml import CommonDML
+from dml.product_dml import ProductDML
 
 class AddProduct:
 
@@ -100,14 +101,12 @@ class AddProduct:
             item_name = self.item_name_entry.get()
             brand_id = self.brand_id_entry.get()
 
-            self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
+            # self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
+            self.cursor.execute(ProductDML.getMaxProductIdOfCompany(self.selected_company_id))
             max_id_result = self.cursor.fetchone()[0]
             newProductID = (max_id_result + 1) if max_id_result else 1
 
-            self.cursor.execute(f"""
-                INSERT INTO Product (product_id, product_price, product_quantity, company_id, item_name, brand_id)
-                VALUES ({newProductID}, {product_price}, {quantity}, {self.selected_company_id}, "{item_name}", {brand_id});
-            """)
+            self.cursor.execute(ProductDML.insertNewProduct(newProductID, product_price, quantity, self.selected_company_id, item_name, brand_id))
             self.connection.commit()
 
             # Refresh the table after successful insertion

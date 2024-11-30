@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel, Label, Button, ttk
+from dml.customer_dml import CustomerDML
 
 class UpdateCustomer:
 
@@ -82,7 +83,7 @@ class UpdateCustomer:
             self.treeview.delete(row)
 
         # Fetch customers from the database
-        self.cursor.execute(f"SELECT customer_id, customer_user_name, customer_first_name, customer_last_name, customer_email, customer_phone_no, customer_street_name, customer_street_no, customer_city, customer_state, customer_postal_code, customer_country FROM Customer WHERE company_id = {self.selected_company_id};")
+        self.cursor.execute(CustomerDML.getAllInfoOfAllCustomersOfACompany(self.selected_company_id))
         rows = self.cursor.fetchall()
 
         # Insert rows into the table in the correct order
@@ -132,22 +133,37 @@ class UpdateCustomer:
             print(f"{key}: {value}")
 
         # Update the customer details in the database
-        update_query = f"""
-        UPDATE Customer 
-        SET customer_user_name = '{details["Username"]}', 
-            customer_first_name = '{details["First Name"]}', 
-            customer_last_name = '{details["Last Name"]}', 
-            customer_email = '{details["Email"]}', 
-            customer_phone_no = '{details["Phone No"]}', 
-            customer_street_name = '{details["Street Name"]}', 
-            customer_street_no = '{details["Street No"]}', 
-            customer_city = '{details["City"]}', 
-            customer_state = '{details["State"]}', 
-            customer_postal_code = '{details["Postal Code"]}', 
-            customer_country = '{details["Country"]}' 
-        WHERE customer_id = {details["Customer ID"]}
-        AND company_id = {self.selected_company_id};
-        """
+        # update_query = f"""
+        # UPDATE Customer 
+        # SET customer_user_name = '{details["Username"]}', 
+        #     customer_first_name = '{details["First Name"]}', 
+        #     customer_last_name = '{details["Last Name"]}', 
+        #     customer_email = '{details["Email"]}', 
+        #     customer_phone_no = '{details["Phone No"]}', 
+        #     customer_street_name = '{details["Street Name"]}', 
+        #     customer_street_no = '{details["Street No"]}', 
+        #     customer_city = '{details["City"]}', 
+        #     customer_state = '{details["State"]}', 
+        #     customer_postal_code = '{details["Postal Code"]}', 
+        #     customer_country = '{details["Country"]}' 
+        # WHERE customer_id = {details["Customer ID"]}
+        # AND company_id = {self.selected_company_id};
+        # """
+        update_query = CustomerDML.updateAllFieldsOfACustomer(
+            self.selected_company_id,
+            details["Customer ID"],
+            details["Username"],
+            details["First Name"],
+            details["Last Name"],
+            details["Email"],
+            details["Phone No"],
+            details["Street Name"],
+            details["Street No"],
+            details["City"],
+            details["State"],
+            details["Postal Code"],
+            details["Country"])
+
         self.cursor.execute(update_query)
         self.connection.commit()
 

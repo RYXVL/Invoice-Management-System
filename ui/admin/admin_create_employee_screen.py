@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, Toplevel, Label, Button
+from dml.employee_dml import EmployeeDML
 
 class AddEmployee:
 
@@ -57,12 +58,13 @@ class AddEmployee:
         self.is_admin_button.config(text=str(new_value), bg="green" if new_value else "red", fg="white")
 
     def create_employee(self):
-        self.cursor.execute(f"SELECT MAX(employee_id) FROM employee WHERE company_id = {self.selected_company_id}")
+        # self.cursor.execute(f"SELECT MAX(employee_id) FROM employee WHERE company_id = {self.selected_company_id}")
+        self.cursor.execute(EmployeeDML.getMaxEmployeeIdOfCompany(self.selected_company_id))
         max_id_result = self.cursor.fetchone()[0]
         newEmployeeID = (max_id_result + 1) if max_id_result else 1
         employee_data = {field: entry.get() for field, entry in self.entries.items()}
         employee_data["Is Admin"] = self.is_admin_value.get()
-        insertEmployeeQuery = f"INSERT INTO Employee (employee_user_name, employee_password, employee_id, employee_first_name, employee_last_name, employee_email, employee_phone_no, employee_hire_date, employee_street_name, employee_street_no, employee_city, employee_state, employee_postal_code, employee_country, company_id, is_admin) VALUES (\"{employee_data['Employee Username']}\", \"{employee_data['Employee Password']}\", {newEmployeeID}, \"{employee_data['Employee First Name']}\", \"{employee_data['Employee Last Name']}\", \"{employee_data['Employee Email']}\", \"{employee_data['Employee Phone No']}\", \"{employee_data['Employee Hire Date']}\", \"{employee_data['Employee Street Name']}\", {employee_data['Employee Street No']}, \"{employee_data['Employee City']}\", \"{employee_data['Employee State']}\", \"{employee_data['Employee Postal Code']}\", \"{employee_data['Employee Country']}\", {self.selected_company_id}, {employee_data['Is Admin']});"
+        insertEmployeeQuery = EmployeeDML.insertNewEmployee(employee_data['Employee Username'], employee_data['Employee Password'], newEmployeeID, employee_data['Employee First Name'], employee_data['Employee Last Name'], employee_data['Employee Email'], employee_data['Employee Phone No'], employee_data['Employee Hire Date'], employee_data['Employee Street Name'], employee_data['Employee Street No'], employee_data['Employee City'], employee_data['Employee State'], employee_data['Employee Postal Code'], employee_data['Employee Country'], self.selected_company_id, employee_data['Is Admin'])
         self.cursor.execute(insertEmployeeQuery)
         self.connection.commit()
 
