@@ -33,6 +33,10 @@ class ViewInvoice:
         self.cursor.execute(queryGetInvoiceItems)
         result = self.cursor.fetchall()
 
+        if len(result) == 0:
+            messagebox.showerror("Error", "No such invoice id exists!")
+            return
+
         billed_items = []
         for item in result:
             serial, item_name, unit_price, quantity_bought, price = item

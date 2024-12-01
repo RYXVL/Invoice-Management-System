@@ -127,6 +127,24 @@ class UpdateCustomer:
     def update_customer(self):
         details = {label: entry.get() for label, entry in self.entries.items()}
 
+        missing_fields = [field for field, value in details.items() if not value]
+        if missing_fields:
+            missing_fields_str = ', '.join(missing_fields)
+            tk.messagebox.showerror("Error", f"The following fields must be filled: {missing_fields_str}")
+            return
+        
+        if not details["Street No"].isdigit():
+            tk.messagebox.showerror("Error", "Street No should be a valid number!")
+            return
+        
+        if not details["Postal Code"].isdigit() or len(details["Postal Code"]) > 5:
+            tk.messagebox.showerror("Error", "Postal Code should be a number with a maximum length of 5!")
+            return
+        
+        if not details["Phone No"].isdigit() or len(details["Phone No"]) > 10:
+            tk.messagebox.showerror("Error", "Phone No should be a number with a maximum length of 10!")
+            return
+
         update_query = CustomerDML.updateAllFieldsOfACustomer(
             self.selected_company_id,
             details["Customer ID"],

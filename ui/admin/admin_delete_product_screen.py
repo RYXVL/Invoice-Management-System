@@ -71,6 +71,9 @@ class DeleteProduct:
             self.connection.commit()
             self.fetch_products()  # Refresh the product table
             self.product_id_entry.delete(0, tk.END)  # Clear the product ID entry
+        else:
+            tk.messagebox.showerror("Error", "Please select a product to be removed from the stock first!")
+            return
 
     def go_back(self):
         """Go back to the previous screen."""

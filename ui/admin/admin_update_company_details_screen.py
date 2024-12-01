@@ -63,6 +63,24 @@ class UpdateCompany:
         """Collect data from entries and update the company in the database."""
         details = {label: entry.get() for label, entry in self.entries.items()}
 
+        missing_fields = [field for field, value in details.items() if not value]
+        if missing_fields:
+            missing_fields_str = ', '.join(missing_fields)
+            tk.messagebox.showerror("Error", f"The following fields must be filled: {missing_fields_str}")
+            return
+        
+        if not details["Street No"].isdigit():
+            messagebox.showerror("Error", "Street No should be a valid number!")
+            return
+        
+        if not details["Postal Code"].isdigit() or len(details["Postal Code"]) > 5:
+            messagebox.showerror("Error", "Postal Code should be a number with a maximum length of 5!")
+            return
+        
+        if not details["Phone No"].isdigit() or len(details["Phone No"]) > 10:
+            messagebox.showerror("Error", "Phone No should be a number with a maximum length of 10!")
+            return
+
         try:
             update_query = CompanyDML.updateAllFieldsOfACompany(details["Company ID"], details["Name"], details["Street Name"], details["Street No"], details["City"], details["State"], details["Postal Code"], details["Country"], details["Email"], details["Phone No"])
             self.cursor.execute(update_query)

@@ -56,13 +56,21 @@ class AdminScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
+
+        if not username or not password:
+            tk.messagebox.showerror("Error", "Please enter your username and password first!")
+            return
+        
         self.cursor.execute(EmployeeDML.getAdminPassword(username, self.companyToID[selected_company]))
         result = self.cursor.fetchall()
+
         if len(result) == 0:
-            print("Invalid company ID, username or no admin access!")
+            tk.messagebox.showerror("Error", "Invalid company ID, username or no admin access!")
             return
+        
         if password != result[0][0]:
-            print("Wrong password entered!")
+            tk.messagebox.showerror("Error", "Wrong password entered!")
             return
+
         self.window.withdraw()
         AdminMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection)

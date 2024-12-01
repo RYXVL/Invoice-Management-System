@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, Toplevel, Label, Button
 from dml.employee_dml import EmployeeDML
+import re
 
 class AddEmployee:
 
@@ -66,6 +67,30 @@ class AddEmployee:
         # Get data of the new employee and push it to the database corresponding to its new employee id
         employee_data = {field: entry.get() for field, entry in self.entries.items()}
         employee_data["Is Admin"] = self.is_admin_value.get()
+
+        # Sanity check: Ensure no fields are empty
+        missing_fields = [field for field, value in employee_data.items() if not value and field != "Is Admin"]
+        if missing_fields:
+            missing_fields_str = ', '.join(missing_fields)
+            tk.messagebox.showerror("Error", f"The following fields must be filled: {missing_fields_str}")
+            return
+        
+        if not employee_data['Employee Phone No'].isdigit() or len(employee_data['Employee Phone No']) > 10:
+            tk.messagebox.showerror("Error", "Phone number must be all numbers and maximum 10 characters.")
+            return
+
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", employee_data['Employee Hire Date']):
+            tk.messagebox.showerror("Error", "Hire date must be in the format yyyy-mm-dd.")
+            return
+
+        if not employee_data['Employee Street No'].isdigit():
+            tk.messagebox.showerror("Error", "Street number must be an integer.")
+            return
+
+        if not employee_data['Employee Postal Code'].isdigit() or len(employee_data['Employee Postal Code']) > 5:
+            tk.messagebox.showerror("Error", "Postal code must be all numbers and maximum 5 characters.")
+            return
+        
         insertEmployeeQuery = EmployeeDML.insertNewEmployee(employee_data['Employee Username'], employee_data['Employee Password'], newEmployeeID, employee_data['Employee First Name'], employee_data['Employee Last Name'], employee_data['Employee Email'], employee_data['Employee Phone No'], employee_data['Employee Hire Date'], employee_data['Employee Street Name'], employee_data['Employee Street No'], employee_data['Employee City'], employee_data['Employee State'], employee_data['Employee Postal Code'], employee_data['Employee Country'], self.selected_company_id, employee_data['Is Admin'])
         self.cursor.execute(insertEmployeeQuery)
         self.connection.commit()

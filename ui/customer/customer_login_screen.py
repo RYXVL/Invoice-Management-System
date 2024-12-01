@@ -49,13 +49,19 @@ class CustomerLoginScreen:
         password = self.password_entry.get()
         selected_company = self.company_var.get()
 
+        if not username or not password:
+            tk.messagebox.showerror("Error", "Please enter your username and password first!")
+            return
+
         self.cursor.execute(CustomerDML.getCustomerPasswordOfACompany(self.companyToID[selected_company], username))
         result = self.cursor.fetchall()
+
         if len(result) == 0:
-            print("Invalid company ID or username!")
+            tk.messagebox.showerror("Error", "Invalid company ID or username!")
             return
+            
         if password != result[0][0]:
-            print("Wrong password entered!")
+            tk.messagebox.showerror("Error", "Wrong password entered!")
             return
 
         self.cursor.execute(CustomerDML.getCustomerIDOfACompany(self.companyToID[selected_company], username))

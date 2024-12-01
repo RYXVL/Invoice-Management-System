@@ -58,13 +58,21 @@ class EmployeeScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
+
+        if not username or not password:
+            tk.messagebox.showerror("Error", "Please enter your username and password first!")
+            return
+
         self.cursor.execute(EmployeeDML.getEmployeeIdAndPassword(self.companyToID[selected_company], username))
         result = self.cursor.fetchall()
+
         if len(result) == 0:
-            print("Invalid company ID, username or no employee access!")
+            tk.messagebox.showerror("Error", "Invalid company ID, username or no employee access!")
             return
+        
         if password != result[0][0]:
-            print("Wrong password entered!")
+            tk.messagebox.showerror("Error", "Wrong password entered!")
             return
+        
         self.window.withdraw()  # Hide the Employee Screen
         EmployeeMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection, result[0][1])  # Open Employee Menu with the current window and cursor

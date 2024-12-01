@@ -75,6 +75,9 @@ class DeleteCustomer:
             self.customer_id_entry.config(state="normal")
             self.customer_id_entry.delete(0, tk.END)
             self.customer_id_entry.config(state="readonly")
+        else:
+            tk.messagebox.showerror("Error", "Please select a customer to be deleted first!")
+            return
 
     def go_back(self):
         """Return to the previous screen."""

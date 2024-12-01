@@ -64,6 +64,11 @@ class CustomerMainScreen:
 
     def print_invoice_id(self):
         invoice_id = self.invoice_entry.get()
+        
+        if not invoice_id:
+            tk.messagebox.showerror("Error", "No invoice id selected!")
+            return
+
         self.invoice_entry.config(state="normal")
         self.invoice_entry.delete(0, tk.END)
         self.invoice_entry.config(state="readonly")

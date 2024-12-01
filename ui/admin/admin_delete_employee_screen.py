@@ -76,6 +76,9 @@ class DeleteEmployee:
             self.employee_id_entry.config(state="normal")
             self.employee_id_entry.delete(0, tk.END)
             self.employee_id_entry.config(state="readonly")
+        else:
+            tk.messagebox.showerror("Error", "Please select an employee to be deleted first!")
+            return
 
     def go_back(self):
         """Return to the previous screen."""

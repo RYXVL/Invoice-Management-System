@@ -4,6 +4,7 @@ from tkinter import Toplevel, Label, Button, StringVar, OptionMenu, Entry, Canva
 from ui.customer.customer_main_screen import CustomerMainScreen
 from dml.customer_dml import CustomerDML
 from dml.company_dml import CompanyDML
+import tkinter as tk
 
 class CustomerSignupScreen:
     def __init__(self, customer_screen, cursor, connection):
@@ -97,6 +98,40 @@ class CustomerSignupScreen:
         postal_code = self.postal_code_entry.get()
         country = self.country_entry.get()
         company_name = self.company_var.get()
+
+        if not username or not password:
+            tk.messagebox.showerror("Error", "Please enter your username and password first!")
+            return
+        if not first_name or not last_name:
+            tk.messagebox.showerror("Error", "First Name and Last Name are required!")
+            return
+        if not email:
+            tk.messagebox.showerror("Error", "Please enter an email address!")
+            return
+        if not phone_no or len(phone_no) > 10 or not phone_no.isdigit():
+            tk.messagebox.showerror("Error", "Phone Number must be a valid number and a maximum of 10 digits!")
+            return
+        if not street_name:
+            tk.messagebox.showerror("Error", "Street Name cannot be empty!")
+            return
+        if not street_no or not street_no.isdigit():
+            tk.messagebox.showerror("Error", "Street Number must be a valid number!")
+            return
+        if not city:
+            tk.messagebox.showerror("Error", "City is required!")
+            return
+        if not state:
+            tk.messagebox.showerror("Error", "State is required!")
+            return
+        if not postal_code or not postal_code.isdigit() or len(postal_code) > 5:
+            tk.messagebox.showerror("Error", "Postal Code must be a valid number and a maximum of 5 digits!")
+            return
+        if not country:
+            tk.messagebox.showerror("Error", "Country is required!")
+            return
+        if not company_name:
+            tk.messagebox.showerror("Error", "Please select a company!")
+            return
 
         # Get company_id from selected company name
         company_id = self.get_company_id(company_name)

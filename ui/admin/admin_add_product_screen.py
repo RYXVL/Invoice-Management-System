@@ -97,6 +97,10 @@ class AddProduct:
             item_name = self.item_name_entry.get()
             brand_id = self.brand_id_entry.get()
 
+            if not item_name or not brand_id:
+                tk.messagebox.showerror("Error", "Select a product from the available product's list first!")
+                return
+
             self.cursor.execute(ProductDML.getMaxProductIdOfCompany(self.selected_company_id))
             max_id_result = self.cursor.fetchone()[0]
             newProductID = (max_id_result + 1) if max_id_result else 1

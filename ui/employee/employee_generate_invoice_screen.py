@@ -141,19 +141,19 @@ class GenerateInvoice:
         product_id = self.product_id_entry.get()
         quantity_text = self.quantity_entry.get()
 
-        if not product_id or not quantity_text:
-            print("Error: Both fields must be filled.")
+        if not product_id:
+            tk.messagebox.showerror("Error", "Please choose a product to add first!")
             return
 
         try:
             quantity = int(quantity_text)
         except ValueError:
-            print("Error: Quantity must be a number.")
+            tk.messagebox.showerror("Error", "Quantity entered should be a number!")
             return
 
         selected_item = self.treeview.selection()
         if not selected_item:
-            print("Error: No row selected.")
+            tk.messagebox.showerror("Error", "Select a product first before trying to add!")
             return
 
         selected_data = self.treeview.item(selected_item[0], "values")
@@ -162,7 +162,7 @@ class GenerateInvoice:
         unit_price = float(selected_data[3])  # Unit Price
 
         if quantity > remaining_quantity:
-            print("Error: Entered quantity exceeds remaining quantity.")
+            tk.messagebox.showerror("Error", "Entered quantity exceeds remaining quantity!")
         else:
             total_price = round(unit_price * quantity, 2)
 
@@ -188,7 +188,7 @@ class GenerateInvoice:
     def delete_item(self):
         selected_item = self.billed_treeview.selection()
         if not selected_item:
-            print("Error: No row selected in billed items table.")
+            tk.messagebox.showerror("Error", "Please select an added item first to remove from the billing!")
             return
 
         selected_data = self.billed_treeview.item(selected_item[0], "values")
@@ -199,7 +199,7 @@ class GenerateInvoice:
         if product_id:
             self.cursor.execute(ProductDML.getQuantityOfAProductOfACompany(self.selected_company_id, product_id))
             old_qty = self.cursor.fetchone()[0]
-            self.cursor.execute(ProductDML.updateProductQuantityOfACompany(self.selected_company_id, product_id, old_qty + quantity_bought))
+            self.cursor.execute(ProductDML.updateProductQuantityOfACompany(self.selected_company_id, product_id, int(old_qty) + int(quantity_bought)))
             self.connection.commit()
             self.load_products()
 
@@ -241,7 +241,7 @@ class GenerateInvoice:
     def generate_invoice(self):
         customer_id = self.customer_id_entry.get()
         if not customer_id:
-            print("Error: Customer ID is required.")
+            tk.messagebox.showerror("Error", "Please enter the customer id first!")
             return
 
         # Prepare the list of items for the invoice
