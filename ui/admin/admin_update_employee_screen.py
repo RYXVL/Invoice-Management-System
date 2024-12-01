@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Label, Button, ttk, Frame, Entry
+from tkinter import Toplevel, Label, Button, ttk, Frame
 import tkinter as tk
 from dml.employee_dml import EmployeeDML
 
@@ -12,11 +12,8 @@ class UpdateEmployee:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Update Employee Details")
-        
-        # Maximize the window
         self.root.state('zoomed')
 
-        # Colors
         c3 = "#4f8fc0"
         c4 = "#26648e"
 
@@ -139,18 +136,6 @@ class UpdateEmployee:
             is_admin,
             details["Hire Date"]
         )
-
-        # self.cursor.execute(f"""
-        #     UPDATE Employee 
-        #     SET employee_user_name = '{details["Username"]}', employee_password = '{details["Password"]}', 
-        #         employee_first_name = '{details["First Name"]}', employee_last_name = '{details["Last Name"]}', 
-        #         employee_email = '{details["Email"]}', employee_phone_no = '{details["Phone No"]}', 
-        #         employee_street_name = '{details["Street Name"]}', employee_street_no = '{details["Street No"]}', 
-        #         employee_city = '{details["City"]}', employee_state = '{details["State"]}', 
-        #         employee_postal_code = '{details["Postal Code"]}', employee_country = '{details["Country"]}', 
-        #         is_admin = {is_admin}, employee_hire_date = '{details["Hire Date"]}'
-        #     WHERE employee_id = '{details["Employee ID"]}' AND company_id = '{self.selected_company_id}'
-        # """)
 
         self.cursor.execute(update_query)
 

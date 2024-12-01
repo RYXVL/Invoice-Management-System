@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import Toplevel, Label, Button
 from ui.employee.employee_generate_invoice_screen import GenerateInvoice
 from ui.employee.employee_view_invoice_screen import ViewInvoice
@@ -7,7 +6,6 @@ class EmployeeMenu:
     
     def __init__(self, employee_screen, cursor, selected_company_id, connection, employee_id):
         self.selected_company_id = selected_company_id
-        print(f'EmployeeMenu: {self.selected_company_id}')
         self.employee_screen = employee_screen  # Store the reference to the EmployeeScreen instance
         self.window = Toplevel(employee_screen)
         self.cursor = cursor

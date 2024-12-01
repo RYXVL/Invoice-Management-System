@@ -12,8 +12,6 @@ class UpdateCustomer:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Update Customer Details")
-
-        # Maximize the window
         self.root.state('zoomed')
 
         # Frame for input
@@ -128,27 +126,7 @@ class UpdateCustomer:
 
     def update_customer(self):
         details = {label: entry.get() for label, entry in self.entries.items()}
-        print("Customer Details to Update:")
-        for key, value in details.items():
-            print(f"{key}: {value}")
 
-        # Update the customer details in the database
-        # update_query = f"""
-        # UPDATE Customer 
-        # SET customer_user_name = '{details["Username"]}', 
-        #     customer_first_name = '{details["First Name"]}', 
-        #     customer_last_name = '{details["Last Name"]}', 
-        #     customer_email = '{details["Email"]}', 
-        #     customer_phone_no = '{details["Phone No"]}', 
-        #     customer_street_name = '{details["Street Name"]}', 
-        #     customer_street_no = '{details["Street No"]}', 
-        #     customer_city = '{details["City"]}', 
-        #     customer_state = '{details["State"]}', 
-        #     customer_postal_code = '{details["Postal Code"]}', 
-        #     customer_country = '{details["Country"]}' 
-        # WHERE customer_id = {details["Customer ID"]}
-        # AND company_id = {self.selected_company_id};
-        # """
         update_query = CustomerDML.updateAllFieldsOfACustomer(
             self.selected_company_id,
             details["Customer ID"],

@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import Toplevel, Label, Button
 from ui.customer.customer_signup_screen import CustomerSignupScreen
 from ui.customer.customer_login_screen import CustomerLoginScreen

@@ -13,9 +13,9 @@ class DeleteEmployee:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Delete Employee")
-        self.root.state("zoomed")  # Set window to open in full screen
+        self.root.state("zoomed")
 
-        # Employee Table with updated columns
+        # Employee Table with information on existing employees
         self.employee_table = ttk.Treeview(
             self.root,
             columns=("ID", "Username", "First Name", "Last Name", "Email", "Phone", "Hire Date", "Is Admin"),
@@ -51,7 +51,6 @@ class DeleteEmployee:
         for row in self.employee_table.get_children():
             self.employee_table.delete(row)  # Clear existing rows
 
-        # query = f"SELECT employee_id, employee_user_name, employee_first_name, employee_last_name, employee_email, employee_phone_no, employee_hire_date, is_admin FROM Employee WHERE company_id = {self.selected_company_id};"
         self.cursor.execute(EmployeeDML.getBasicInfoAllEmployees(self.selected_company_id))
         employees = self.cursor.fetchall()
         for employee in employees:

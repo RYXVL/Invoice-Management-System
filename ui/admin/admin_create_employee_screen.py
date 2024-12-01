@@ -12,7 +12,7 @@ class AddEmployee:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Add Employee")
-        self.root.state("zoomed")  # Set window to open in full screen
+        self.root.state("zoomed")
 
         # Create a frame for grid layout
         self.input_frame = tk.Frame(self.root)
@@ -58,10 +58,12 @@ class AddEmployee:
         self.is_admin_button.config(text=str(new_value), bg="green" if new_value else "red", fg="white")
 
     def create_employee(self):
-        # self.cursor.execute(f"SELECT MAX(employee_id) FROM employee WHERE company_id = {self.selected_company_id}")
+        # Find the employee id of the new employee to be created
         self.cursor.execute(EmployeeDML.getMaxEmployeeIdOfCompany(self.selected_company_id))
         max_id_result = self.cursor.fetchone()[0]
         newEmployeeID = (max_id_result + 1) if max_id_result else 1
+
+        # Get data of the new employee and push it to the database corresponding to its new employee id
         employee_data = {field: entry.get() for field, entry in self.entries.items()}
         employee_data["Is Admin"] = self.is_admin_value.get()
         insertEmployeeQuery = EmployeeDML.insertNewEmployee(employee_data['Employee Username'], employee_data['Employee Password'], newEmployeeID, employee_data['Employee First Name'], employee_data['Employee Last Name'], employee_data['Employee Email'], employee_data['Employee Phone No'], employee_data['Employee Hire Date'], employee_data['Employee Street Name'], employee_data['Employee Street No'], employee_data['Employee City'], employee_data['Employee State'], employee_data['Employee Postal Code'], employee_data['Employee Country'], self.selected_company_id, employee_data['Is Admin'])
@@ -72,8 +74,3 @@ class AddEmployee:
         """Go back to the previous screen."""
         self.root.destroy()
         self.prev_screen.deiconify()
-
-# if __name__ == "__main__":
-#     root = tk.Tk()
-#     app = AddEmployee(root, cursor=None, go_back_func=None, selected_company_id=1, connection=None)
-#     root.mainloop()

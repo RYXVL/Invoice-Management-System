@@ -5,6 +5,7 @@ from ui.employee.employee_start_screen import EmployeeScreen
 from ui.customer.customer_start_screen import CustomerScreen
 
 class StartScreen:
+    
     def __init__(self, root, cursor, connection):
         self.root = root
         self.cursor = cursor

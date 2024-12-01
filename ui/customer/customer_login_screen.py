@@ -5,6 +5,7 @@ from dml.company_dml import CompanyDML
 from dml.customer_dml import CustomerDML
 
 class CustomerLoginScreen:
+
     def __init__(self, customer_screen, cursor):
         self.customer_screen = customer_screen
         self.window = Toplevel()
@@ -34,7 +35,6 @@ class CustomerLoginScreen:
     def fetch_company_names(self):
         self.cursor.execute(CompanyDML.getBasicInfoAllCompanies())
         queryResult = self.cursor.fetchall()
-        print(queryResult)
         companyToID = {}
         for row in queryResult:
             companyToID[row[1]] = row[0]
@@ -48,7 +48,7 @@ class CustomerLoginScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
-        # self.cursor.execute(f"SELECT customer_password FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+
         self.cursor.execute(CustomerDML.getCustomerPasswordOfACompany(self.companyToID[selected_company], username))
         result = self.cursor.fetchall()
         if len(result) == 0:
@@ -57,12 +57,9 @@ class CustomerLoginScreen:
         if password != result[0][0]:
             print("Wrong password entered!")
             return
-        # self.cursor.execute(f"SELECT customer_id FROM customer WHERE company_id = {self.companyToID[selected_company]} AND customer_user_name =  '{username}'")
+
         self.cursor.execute(CustomerDML.getCustomerIDOfACompany(self.companyToID[selected_company], username))
         customer_id = self.cursor.fetchone()[0]       
-        print(f"Username: {username}")
-        print(f"Password: {password}")
-        print(f"Selected Company: {selected_company}")
         self.window.withdraw()
         CustomerMainScreen(self.window, self, customer_id, self.cursor,self.companyToID[selected_company])
 

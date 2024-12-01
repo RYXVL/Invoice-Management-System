@@ -15,11 +15,26 @@ VALUES
 ('admin3', 'adminpass', 103, 'Bob', 'Johnson', 'bob.j@example.com', '5553456789', '2021-09-25', 'Elm Drive', 78, 'Westfield', 'TX', '73301', 'USA', 3, TRUE),
 ('admin4', 'secure123', 104, 'Catherine', 'Brown', 'catherine.b@example.com', '5554567890', '2020-11-30', 'Cedar Road', 101, 'Lakeside', 'FL', '32003', 'USA', 4, TRUE),
 ('admin5', 'admin789', 105, 'David', 'Taylor', 'david.t@example.com', '5555678901', '2023-06-01', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5, TRUE),
+('admin6', 'admin123', 111, 'Emma', 'Watson', 'emma.w@example.com', '5551122334', '2023-02-14', 'Chestnut Street', 14, 'Woodland', 'NY', '10002', 'USA', 1, TRUE),
+('admin7', 'strongpass', 112, 'Oliver', 'Brown', 'oliver.b@example.com', '5552233445', '2023-05-01', 'Maple Drive', 54, 'Greenville', 'CA', '90211', 'USA', 2, TRUE),
+('admin8', 'admin567', 113, 'Sophia', 'Taylor', 'sophia.t@example.com', '5553344556', '2022-08-20', 'Walnut Avenue', 23, 'Midtown', 'TX', '73302', 'USA', 3, TRUE),
+('admin9', 'secure456', 114, 'Liam', 'Clark', 'liam.c@example.com', '5554455667', '2021-12-18', 'Oak Road', 76, 'Eastfield', 'FL', '32004', 'USA', 4, TRUE),
+('admin10', 'adminsecure', 115, 'Isabella', 'Davis', 'isabella.d@example.com', '5555566778', '2023-09-30', 'Cedar Lane', 34, 'Hillcrest', 'WA', '98002', 'USA', 5, TRUE),
 ('user1', 'userpass1', 106, 'Michael', 'Green', 'michael.green@example.com', '5556789012', '2023-03-15', 'Birch Street', 30, 'Sunnyvale', 'CA', '94086', 'USA', 1, FALSE),
 ('user2', 'userpass2', 107, 'Laura', 'King', 'laura.king@example.com', '5557890123', '2022-07-22', 'Willow Avenue', 12, 'Mountain View', 'CA', '94043', 'USA', 2, FALSE),
 ('user3', 'userpass3', 108, 'Daniel', 'Lee', 'daniel.lee@example.com', '5558901234', '2021-10-10', 'Spruce Road', 55, 'Palo Alto', 'CA', '94301', 'USA', 3, FALSE),
 ('user4', 'userpass4', 109, 'Sarah', 'White', 'sarah.white@example.com', '5559012345', '2020-12-05', 'Fir Lane', 19, 'San Jose', 'CA', '95112', 'USA', 4, FALSE),
-('user5', 'userpass5', 110, 'James', 'Wilson', 'james.wilson@example.com', '5550123456', '2023-08-01', 'Ash Boulevard', 88, 'Santa Clara', 'CA', '95050', 'USA', 5, FALSE);
+('user5', 'userpass5', 110, 'James', 'Wilson', 'james.wilson@example.com', '5550123456', '2023-08-01', 'Ash Boulevard', 88, 'Santa Clara', 'CA', '95050', 'USA', 5, FALSE),
+('user6', 'userpass6', 116, 'Ethan', 'Harris', 'ethan.h@example.com', '5556677889', '2022-11-12', 'Birch Avenue', 11, 'Riverfield', 'NY', '10003', 'USA', 1, FALSE),
+('user7', 'userpass7', 117, 'Ava', 'Clark', 'ava.c@example.com', '5557788990', '2021-06-18', 'Pine Drive', 27, 'Springfield', 'CA', '90212', 'USA', 2, FALSE),
+('user8', 'userpass8', 118, 'Logan', 'Anderson', 'logan.a@example.com', '5558899001', '2023-04-21', 'Ash Street', 40, 'Lakeside', 'TX', '73303', 'USA', 3, FALSE),
+('user9', 'userpass9', 119, 'Charlotte', 'Martinez', 'charlotte.m@example.com', '5559900112', '2022-02-25', 'Willow Road', 62, 'Hillview', 'FL', '32005', 'USA', 4, FALSE),
+('user10', 'userpass10', 120, 'Henry', 'Thompson', 'henry.t@example.com', '5550011223', '2023-07-19', 'Elm Avenue', 36, 'Meadowfield', 'WA', '98003', 'USA', 5, FALSE),
+('user11', 'userpass11', 121, 'Mia', 'Roberts', 'mia.roberts@example.com', '5551122339', '2022-09-01', 'Cypress Avenue', 13, 'Oakville', 'NY', '10004', 'USA', 1, FALSE),
+('user12', 'userpass12', 122, 'Benjamin', 'Walker', 'benjamin.walker@example.com', '5552233455', '2023-02-15', 'Poplar Drive', 31, 'Crestfield', 'CA', '90213', 'USA', 2, FALSE),
+('user13', 'userpass13', 123, 'Harper', 'Scott', 'harper.scott@example.com', '5553344559', '2021-12-05', 'Magnolia Lane', 67, 'Evergreen', 'TX', '73304', 'USA', 3, FALSE),
+('user14', 'userpass14', 124, 'Elijah', 'Adams', 'elijah.adams@example.com', '5554455867', '2023-06-22', 'Palm Boulevard', 42, 'Brookfield', 'FL', '32006', 'USA', 4, FALSE),
+('user15', 'userpass15', 125, 'Amelia', 'Baker', 'amelia.baker@example.com', '5555566779', '2022-01-12', 'Maple Avenue', 90, 'Shoreline', 'WA', '98004', 'USA', 5, FALSE);
 
 INSERT IGNORE INTO Brand (brand_name) VALUES
 ('ErgoFurniture'),
@@ -66,7 +81,27 @@ VALUES
 ('cust2', 'custpass2', 202, 'Oliver', 'Williams', 'oliver.williams@example.com', '5552345678', 'Oak Avenue', 45, 'Greendale', 'CA', '90210', 'USA', 2),
 ('cust3', 'custpass3', 203, 'Sophia', 'Martinez', 'sophia.martinez@example.com', '5553456789', 'Elm Drive', 78, 'Westfield', 'TX', '73301', 'USA', 3),
 ('cust4', 'custpass4', 204, 'Liam', 'Brown', 'liam.brown@example.com', '5554567890', 'Cedar Road', 101, 'Lakeside', 'FL', '32003', 'USA', 4),
-('cust5', 'custpass5', 205, 'Mia', 'Davis', 'mia.davis@example.com', '5555678901', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5);
+('cust5', 'custpass5', 205, 'Mia', 'Davis', 'mia.davis@example.com', '5555678901', 'Pine Lane', 62, 'Hilltop', 'WA', '98001', 'USA', 5),
+('cust6', 'custpass6', 206, 'Noah', 'Miller', 'noah.miller@example.com', '5556789012', 'Birch Street', 30, 'Sunnyvale', 'CA', '94086', 'USA', 1),
+('cust7', 'custpass7', 207, 'Ava', 'Taylor', 'ava.taylor@example.com', '5557890123', 'Willow Avenue', 12, 'Mountain View', 'CA', '94043', 'USA', 1),
+('cust8', 'custpass8', 208, 'James', 'Anderson', 'james.anderson@example.com', '5558901234', 'Spruce Road', 55, 'Palo Alto', 'CA', '94301', 'USA', 1),
+('cust9', 'custpass9', 209, 'Isabella', 'Thomas', 'isabella.thomas@example.com', '5559012345', 'Fir Lane', 19, 'San Jose', 'CA', '95112', 'USA', 1),
+('cust10', 'custpass10', 210, 'Lucas', 'Moore', 'lucas.moore@example.com', '5551123456', 'Ash Boulevard', 88, 'Santa Clara', 'CA', '95050', 'USA', 2),
+('cust11', 'custpass11', 211, 'Charlotte', 'Clark', 'charlotte.clark@example.com', '5552234567', 'Maple Avenue', 66, 'Oakland', 'CA', '94601', 'USA', 2),
+('cust12', 'custpass12', 212, 'Elijah', 'Harris', 'elijah.harris@example.com', '5553345678', 'Cypress Lane', 34, 'Fremont', 'CA', '94536', 'USA', 2),
+('cust13', 'custpass13', 213, 'Amelia', 'Martinez', 'amelia.martinez@example.com', '5554456789', 'Palm Road', 52, 'Hayward', 'CA', '94541', 'USA', 2),
+('cust14', 'custpass14', 214, 'Ethan', 'Lee', 'ethan.lee@example.com', '5555567890', 'Magnolia Drive', 73, 'Austin', 'TX', '73344', 'USA', 3),
+('cust15', 'custpass15', 215, 'Harper', 'King', 'harper.king@example.com', '5556678901', 'Poplar Street', 41, 'Dallas', 'TX', '75201', 'USA', 3),
+('cust16', 'custpass16', 216, 'Logan', 'Walker', 'logan.walker@example.com', '5557789012', 'Birch Avenue', 29, 'San Antonio', 'TX', '78201', 'USA', 3),
+('cust17', 'custpass17', 217, 'Aria', 'Scott', 'aria.scott@example.com', '5558890123', 'Pine Lane', 82, 'Houston', 'TX', '77001', 'USA', 3),
+('cust18', 'custpass18', 218, 'Henry', 'White', 'henry.white@example.com', '5559901234', 'Cedar Boulevard', 57, 'Miami', 'FL', '33101', 'USA', 4),
+('cust19', 'custpass19', 219, 'Ella', 'Adams', 'ella.adams@example.com', '5550012345', 'Willow Drive', 15, 'Orlando', 'FL', '32801', 'USA', 4),
+('cust20', 'custpass20', 220, 'Samuel', 'Nelson', 'samuel.nelson@example.com', '5551123456', 'Elm Road', 25, 'Tampa', 'FL', '33601', 'USA', 4),
+('cust21', 'custpass21', 221, 'Grace', 'Hill', 'grace.hill@example.com', '5552234567', 'Oak Boulevard', 61, 'Jacksonville', 'FL', '32099', 'USA', 4),
+('cust22', 'custpass22', 222, 'Levi', 'Perez', 'levi.perez@example.com', '5553345678', 'Maple Street', 18, 'Seattle', 'WA', '98101', 'USA', 5),
+('cust23', 'custpass23', 223, 'Scarlett', 'Reed', 'scarlett.reed@example.com', '5554456789', 'Pine Drive', 46, 'Spokane', 'WA', '99201', 'USA', 5),
+('cust24', 'custpass24', 224, 'Mason', 'Young', 'mason.young@example.com', '5555567890', 'Cypress Lane', 63, 'Tacoma', 'WA', '98401', 'USA', 5),
+('cust25', 'custpass25', 225, 'Luna', 'Evans', 'luna.evans@example.com', '5556678901', 'Willow Avenue', 36, 'Bellevue', 'WA', '98004', 'USA', 5);
 
 INSERT IGNORE INTO Product (product_id, product_price, product_quantity, company_id, item_name, brand_id)
 VALUES

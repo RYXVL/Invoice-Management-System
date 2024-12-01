@@ -1,5 +1,3 @@
-import tkinter as tk
-import tkinter as tk
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu, Entry
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu
 from tkinter import Toplevel, Label, Button, StringVar, OptionMenu, Entry, Canvas, Frame, Scrollbar
@@ -14,7 +12,6 @@ class CustomerSignupScreen:
         self.connection = connection
         self.window = Toplevel()
         self.window.title("Customer Signup")
-        # self.window.geometry("400x600")
         self.window.state("zoomed")
 
         # Create a canvas with a scrollbar
@@ -113,7 +110,6 @@ class CustomerSignupScreen:
         queryToExecute = CustomerDML.insertCustomer(username, password, customer_id, first_name, last_name, email, phone_no, street_name,
              street_no, city, state, postal_code, country, company_id)
         
-        print(queryToExecute)
         self.cursor.execute(queryToExecute)
         self.connection.commit()
 

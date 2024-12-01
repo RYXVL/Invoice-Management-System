@@ -12,9 +12,7 @@ class UpdateCompany:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Update Company Details")
-
-        # Maximize the window
-        self.root.state('zoomed')  # Maximizes the window
+        self.root.state('zoomed')
 
         # Frame for input
         self.input_frame = tk.Frame(self.root)
@@ -27,6 +25,7 @@ class UpdateCompany:
             "Email", "Phone No"
         ]
 
+        # Generate the labels and corresponding input fields on the screen
         self.entries = {}
         for i, label in enumerate(labels):
             Label(self.input_frame, text=label, font=("times new roman", 12)).grid(row=i, column=0, sticky="w", pady=5)
@@ -49,7 +48,6 @@ class UpdateCompany:
         back_button.pack(pady=10)
 
     def fetch_company_data(self):
-        # query = f"SELECT company_id, company_name, company_street_name, company_street_no, company_city, company_state, company_postal_code, company_country, company_email, company_phone_no FROM Company WHERE company_id = {self.selected_company_id};"
         self.cursor.execute(CompanyDML.getAllInfoOfACompany(self.selected_company_id))
         company_data = self.cursor.fetchone()
 
@@ -67,8 +65,6 @@ class UpdateCompany:
 
         try:
             update_query = CompanyDML.updateAllFieldsOfACompany(details["Company ID"], details["Name"], details["Street Name"], details["Street No"], details["City"], details["State"], details["Postal Code"], details["Country"], details["Email"], details["Phone No"])
-                # WHERE company_id = {details["Company ID"]}
-                # """
             self.cursor.execute(update_query)
             self.connection.commit()
             messagebox.showinfo("Success", "Company details updated successfully!")

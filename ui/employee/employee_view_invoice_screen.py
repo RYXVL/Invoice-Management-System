@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import Toplevel, Label, Button, Entry, messagebox
 from reportlab.pdfgen import canvas
 from datetime import date
@@ -16,7 +15,6 @@ class ViewInvoice:
         self.cursor = cursor
         self.connection = connection
         self.selected_company_id = selected_company_id
-        print(f'ViewInvoice: {self.selected_company_id}')
         self.window.title("View Invoice")
         self.window.geometry("400x300")
         
@@ -30,13 +28,7 @@ class ViewInvoice:
         Button(self.window, text="Back", font=("times new roman", 14), command=self.go_back, bg="#26648e", fg="white").pack(pady=10)
 
     def generate_invoice(self, invoice_id):
-        # customer_id = self.customer_id_entry.get()
-        # if not customer_id:
-        #     print("Error: Customer ID is required.")
-        #     return
-
         # Prepare the list of items for the invoice
-
         queryGetInvoiceItems = CommonDML.getInvoiceItems(invoice_id)
         self.cursor.execute(queryGetInvoiceItems)
         result = self.cursor.fetchall()
@@ -46,23 +38,11 @@ class ViewInvoice:
             serial, item_name, unit_price, quantity_bought, price = item
             billed_items.append([serial, item_name, unit_price, quantity_bought, price])
 
-        print(billed_items)
-        # for item in self.billed_treeview.get_children():
-        #     row = self.billed_treeview.item(item, "values")
-        #     serial, item_name, unit_price, quantity_bought, price = row
-        #     billed_items.append([serial, item_name, unit_price, quantity_bought, price])
-
-        # self.insertInvoiceItems(customer_id, billed_items)
-
         # Fetch necessary company details from the database
-        # query = f"SELECT company_name, company_street_name, company_city, company_phone_no FROM company WHERE company_id = {self.selected_company_id};"
         query = CompanyDML.getCompanyInfoForBilling(self.selected_company_id)
         self.cursor.execute(query)
         company_details = self.cursor.fetchone()
         company_name, address, city, contact_number = company_details
-        # print(f"Customer ID: {customer_id}")
-        # print(billed_items)
-        # queryGetCustomerID = f"select customer_id from processes where invoice_id = {invoice_id};"
         queryGetCustomerID = ProcessDML.getCustomerIdOfAnInvoice(invoice_id)
         self.cursor.execute(queryGetCustomerID)
         customer_id = self.cursor.fetchone()[0]
@@ -73,21 +53,7 @@ class ViewInvoice:
 
 
     def generate_invoice_pdf(self, billed_items, company_name, address, city, contact_number, customer_id, invoice_id):
-        # Generate a random invoice number within the specified range
         generated_invoice_no = invoice_id
-        # generated_invoice_no = random.randint(1000000, 9999999)
-
-        # Insert company and customer values into their corresponding tables and commit changes
-        # mycursor.execute(f'INSERT INTO company VALUES({generated_invoice_no}, "{self.company_name}", "{self.address}", "{self.city}", {self.compno}, "{self.file_name}");')
-        # db.commit()
-
-        # Format the date
-        # tempDate = self.date
-        # dateList = tempDate.split("/")
-        # tempDate = dateList[2] + "-" + dateList[1] + "-" + dateList[0]
-
-        # mycursor.execute(f'INSERT INTO customer VALUES({generated_invoice_no}, "{self.c_name}", {self.contact}, "{tempDate}");')
-        # db.commit()
 
         # Define positions for the table
         HEIGHT = 130
@@ -110,8 +76,6 @@ class ViewInvoice:
         for i in range(len(billed_items)):
             for j in range(len(billed_items[0])):
                 c.drawCentredString(WIDTH[j], HEIGHT, str(billed_items[i][j]))
-            # mycursor.execute(f'INSERT INTO purchase VALUES({generated_invoice_no}, "{self.lst[i][1]}", {self.lst[i][2]}, {self.lst[i][3]});')
-            # db.commit()
             HEIGHT = HEIGHT + 10
 
         # Draw vertical lines for the bill layout
@@ -129,13 +93,6 @@ class ViewInvoice:
         c.drawCentredString(148, 218, "Subtotal: ")
         c.drawCentredString(173, 218, str(round(subtotal, 2)))
 
-        # Draw company logo and details
-        # c.translate(10, 40)
-        # c.scale(1, -1)
-        # c.drawImage(f'{self.file_name}', 0, 0, width=50, height=30)
-        # c.scale(1, -1)
-        # c.translate(-10, -40)
-
         # Draw company name, address, and contact info
         c.setFont("Times-Bold", 10)
         c.drawRightString(180, 20, company_name)
@@ -152,7 +109,6 @@ class ViewInvoice:
         c.setFont("Times-Bold", 8)
         c.drawCentredString(100, 55, "INVOICE")
 
-        # queryGetCustomerInfo = f"SELECT customer_first_name, customer_last_name FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};"
         queryGetCustomerInfo = CustomerDML.getCustomerInfoForBilling(self.selected_company_id, customer_id)
         self.cursor.execute(queryGetCustomerInfo)
         customer_info = self.cursor.fetchone()
@@ -200,7 +156,6 @@ class ViewInvoice:
             messagebox.showerror("Error", "Invoice ID must be a numeric value.")
             return
 
-        print(f"Invoice ID entered: {invoice_id}")
         self.generate_invoice(invoice_id)
         # Here, you can add further logic to fetch and display the invoice details.
 

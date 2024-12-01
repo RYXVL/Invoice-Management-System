@@ -13,9 +13,9 @@ class DeleteCustomer:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Delete Customer")
-        self.root.state("zoomed")  # Set window to open in full screen
+        self.root.state("zoomed")
 
-        # Customer Table
+        # Setup the table on screen that shows existing customers
         self.customer_table = ttk.Treeview(
             self.root,
             columns=("ID", "Username", "First Name", "Last Name", "Email", "Phone"),
@@ -29,7 +29,7 @@ class DeleteCustomer:
         self.customer_table.heading("Phone", text="Phone")
         self.customer_table.pack(pady=10, fill=tk.BOTH, expand=True)
 
-        # Populate the table
+        # Populate the table with data fetched from the database
         self.fetch_customers()
 
         # Non-editable Customer ID field
@@ -49,8 +49,7 @@ class DeleteCustomer:
         for row in self.customer_table.get_children():
             self.customer_table.delete(row)  # Clear existing rows
 
-        # query = f"SELECT customer_id, customer_user_name, customer_first_name, customer_last_name, customer_email, customer_phone_no FROM Customer WHERE company_id = {self.selected_company_id};"
-        # self.cursor.execute(query)
+        # Fetch data of existing customers and populate it on the screen inside the table displayed
         self.cursor.execute(CustomerDML.getBasicInfoAllCustomers(self.selected_company_id))
         customers = self.cursor.fetchall()
         for customer in customers:
@@ -70,7 +69,6 @@ class DeleteCustomer:
         """Delete selected customer and refresh the table."""
         customer_id = self.customer_id_entry.get()
         if customer_id:
-            # self.cursor.execute(f"DELETE FROM Customer WHERE customer_id = {customer_id} AND company_id = {self.selected_company_id};")
             self.cursor.execute(CustomerDML.deleteCustomer(customer_id, self.selected_company_id))
             self.connection.commit()
             self.fetch_customers()

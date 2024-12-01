@@ -66,9 +66,5 @@ class EmployeeScreen:
         if password != result[0][0]:
             print("Wrong password entered!")
             return
-        print(f"Username: {username}")
-        print(f"Password: {password}")
-        print(f"Selected Company: {selected_company}")
-        print(f"Employee ID: {result[0][1]}")
         self.window.withdraw()  # Hide the Employee Screen
         EmployeeMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection, result[0][1])  # Open Employee Menu with the current window and cursor

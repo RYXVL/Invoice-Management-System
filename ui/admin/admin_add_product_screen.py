@@ -10,16 +10,11 @@ class AddProduct:
         self.cursor = cursor
         self.connection = connection
         self.selected_company_id = selected_company_id
-        print(self.selected_company_id)
         self.prev_screen = root
         self.go_back_func = go_back_func
         self.root.title("Add Product")
-
-        # Set window size to 1500x1000
-        # self.root.geometry("1500x1000")
         self.root.state("zoomed")
 
-        # Frame for entry and label
         self.input_frame = tk.Frame(self.root)
         self.input_frame.pack(pady=5)
 
@@ -54,7 +49,7 @@ class AddProduct:
             self.tree.heading(col, text=col)
             self.tree.column(col, width=100, anchor="center")
 
-        # Insert data into the table (if there's existing data, can be fetched from database)
+        # Insert data into the table using existing data fetched from the database
         self.load_data()
 
         # Bind the Treeview selection event
@@ -79,10 +74,11 @@ class AddProduct:
         Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def load_data(self):
-        # Query the database to load the current products into the treeview
         selectQuery = CommonDML().fetchNotSoldProductsByACompany(self.selected_company_id)
         self.cursor.execute(selectQuery)
         rows = self.cursor.fetchall()
+
+        # Add fetched data to the table on the screen
         for row in rows:
             self.tree.insert("", "end", values=row)
 
@@ -91,7 +87,7 @@ class AddProduct:
         product_price = self.product_price_entry.get()
         quantity = self.quantity_entry.get()
 
-        # Validate inputs (optional)
+        # Validate inputs
         if not product_price or not quantity:
             tk.messagebox.showerror("Error", "Price and Quantity must be filled!")
             return
@@ -101,7 +97,6 @@ class AddProduct:
             item_name = self.item_name_entry.get()
             brand_id = self.brand_id_entry.get()
 
-            # self.cursor.execute(f"SELECT MAX(product_id) FROM product WHERE company_id = {self.selected_company_id}")
             self.cursor.execute(ProductDML.getMaxProductIdOfCompany(self.selected_company_id))
             max_id_result = self.cursor.fetchone()[0]
             newProductID = (max_id_result + 1) if max_id_result else 1
@@ -122,6 +117,7 @@ class AddProduct:
         self.brand_id_entry.config(state="normal")
         self.brand_id_entry.delete(0, tk.END)
         self.brand_id_entry.config(state="readonly")
+        
         self.product_price_entry.delete(0, tk.END)
         self.quantity_entry.delete(0, tk.END)
 

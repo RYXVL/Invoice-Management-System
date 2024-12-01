@@ -13,7 +13,7 @@ class DeleteProduct:
         self.selected_company_id = selected_company_id
         self.go_back_func = go_back_func
         self.root.title("Delete Product")
-        self.root.state("zoomed")  # Set window to open in full screen
+        self.root.state("zoomed")
 
         # Frame for product ID and table
         self.input_frame = tk.Frame(self.root)
@@ -24,7 +24,7 @@ class DeleteProduct:
         self.product_id_entry = tk.Entry(self.input_frame, font=("times new roman", 12), state='readonly')  # Non-editable field
         self.product_id_entry.grid(row=0, column=1, pady=5, padx=5)
 
-        # Table to display products
+        # Table to display existing sold products of a company
         self.tree = ttk.Treeview(self.root, columns=("product_id", "product_price", "product_quantity",  "item_name", "brand_name"), show="headings")
         self.tree.pack(pady=10, padx=10)
         self.tree.heading("product_id", text="Product ID")
@@ -34,7 +34,7 @@ class DeleteProduct:
         self.tree.heading("brand_name", text="Brand Name")
         self.tree.bind("<ButtonRelease-1>", self.on_select)
 
-        # Fetch the products for the selected company
+        # Fetch the products for the selected company and populate it on the displayed table
         self.fetch_products()
 
         # Delete and Back buttons
@@ -76,9 +76,3 @@ class DeleteProduct:
         """Go back to the previous screen."""
         self.root.destroy()
         self.prev_screen.deiconify()
-
-# if __name__ == "__main__":
-#     root = tk.Tk()
-#     # Assuming cursor and connection are already established
-#     app = DeleteProduct(root, cursor=None, go_back_func=None, selected_company_id=1, connection=None)
-#     root.mainloop()

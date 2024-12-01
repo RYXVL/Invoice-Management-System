@@ -16,14 +16,17 @@ class AdminScreen:
         self.window.geometry("400x400")
         Label(self.window, text="Admin Screen", font=("times new roman", 24, "bold"), fg="black").pack(pady=10)
 
+        # Field to take in username
         Label(self.window, text="Username:", font=("times new roman", 14)).pack(pady=5)
         self.username_entry = tk.Entry(self.window, font=("times new roman", 14))
         self.username_entry.pack(pady=5)
 
+        # Field to take in password
         Label(self.window, text="Password:", font=("times new roman", 14)).pack(pady=5)
         self.password_entry = tk.Entry(self.window, font=("times new roman", 14), show="*")
         self.password_entry.pack(pady=5)
 
+        # Dropdown menu to let user choose the company he/she belongs to
         Label(self.window, text="Select Company:", font=("times new roman", 14)).pack(pady=5)
         self.company_var = StringVar()
         self.company_dropdown = OptionMenu(self.window, self.company_var, *self.fetch_company_names())
@@ -36,7 +39,6 @@ class AdminScreen:
     def fetch_company_names(self):
         self.cursor.execute(CompanyDML.getBasicInfoAllCompanies())
         queryResult = self.cursor.fetchall()
-        print(queryResult)
         companyToID = {}
         for row in queryResult:
             companyToID[row[1]] = row[0]
@@ -54,7 +56,6 @@ class AdminScreen:
         username = self.username_entry.get()
         password = self.password_entry.get()
         selected_company = self.company_var.get()
-        # self.cursor.execute(f"SELECT employee_password FROM employee WHERE company_id = {self.companyToID[selected_company]} AND employee_user_name =  '{username}' AND is_admin = 1;")
         self.cursor.execute(EmployeeDML.getAdminPassword(username, self.companyToID[selected_company]))
         result = self.cursor.fetchall()
         if len(result) == 0:
@@ -63,8 +64,5 @@ class AdminScreen:
         if password != result[0][0]:
             print("Wrong password entered!")
             return
-        print(f"Username: {username}")
-        print(f"Password: {password}")
-        print(f"Selected Company: {selected_company}")
         self.window.withdraw()
         AdminMenu(self.window, self.cursor, self.companyToID[selected_company], self.connection)
