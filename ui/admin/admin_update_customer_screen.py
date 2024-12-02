@@ -145,22 +145,40 @@ class UpdateCustomer:
             tk.messagebox.showerror("Error", "Phone No should be a number with a maximum length of 10!")
             return
 
-        update_query = CustomerDML.updateAllFieldsOfACustomer(
-            self.selected_company_id,
-            details["Customer ID"],
-            details["Username"],
-            details["First Name"],
-            details["Last Name"],
-            details["Email"],
-            details["Phone No"],
-            details["Street Name"],
-            details["Street No"],
-            details["City"],
-            details["State"],
-            details["Postal Code"],
-            details["Country"])
+        # update_query = CustomerDML.updateAllFieldsOfACustomer(
+        #     self.selected_company_id,
+        #     details["Customer ID"],
+        #     details["Username"],
+        #     details["First Name"],
+        #     details["Last Name"],
+        #     details["Email"],
+        #     details["Phone No"],
+        #     details["Street Name"],
+        #     details["Street No"],
+        #     details["City"],
+        #     details["State"],
+        #     details["Postal Code"],
+        #     details["Country"])
 
-        self.cursor.execute(update_query)
+        # self.cursor.execute(update_query)
+        self.cursor.callproc(
+            'UpdateAllFieldsOfACustomer', 
+            [
+                self.selected_company_id,
+                details["Customer ID"],
+                details["Username"],
+                details["First Name"],
+                details["Last Name"],
+                details["Email"],
+                details["Phone No"],
+                details["Street Name"],
+                details["Street No"],
+                details["City"],
+                details["State"],
+                details["Postal Code"],
+                details["Country"]
+            ]
+        )
         self.connection.commit()
 
         # Refresh the table to reflect the updated data

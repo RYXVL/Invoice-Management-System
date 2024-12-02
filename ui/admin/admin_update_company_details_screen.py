@@ -82,8 +82,23 @@ class UpdateCompany:
             return
 
         try:
-            update_query = CompanyDML.updateAllFieldsOfACompany(details["Company ID"], details["Name"], details["Street Name"], details["Street No"], details["City"], details["State"], details["Postal Code"], details["Country"], details["Email"], details["Phone No"])
-            self.cursor.execute(update_query)
+            # update_query = CompanyDML.updateAllFieldsOfACompany(details["Company ID"], details["Name"], details["Street Name"], details["Street No"], details["City"], details["State"], details["Postal Code"], details["Country"], details["Email"], details["Phone No"])
+            # self.cursor.execute(update_query)
+            self.cursor.callproc(
+                'UpdateAllFieldsOfACompany', 
+                [
+                    details["Company ID"], 
+                    details["Name"], 
+                    details["Street Name"], 
+                    details["Street No"], 
+                    details["City"], 
+                    details["State"], 
+                    details["Postal Code"], 
+                    details["Country"], 
+                    details["Email"], 
+                    details["Phone No"]
+                ]
+            )
             self.connection.commit()
             messagebox.showinfo("Success", "Company details updated successfully!")
         except Exception as e:

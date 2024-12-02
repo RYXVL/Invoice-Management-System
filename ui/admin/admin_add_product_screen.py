@@ -74,13 +74,15 @@ class AddProduct:
         Button(self.root, text="Back", font=("times new roman", 14), bg="#26648e", fg="white", command=self.go_back).pack(pady=10)
 
     def load_data(self):
-        selectQuery = CommonDML().fetchNotSoldProductsByACompany(self.selected_company_id)
-        self.cursor.execute(selectQuery)
-        rows = self.cursor.fetchall()
-
-        # Add fetched data to the table on the screen
-        for row in rows:
-            self.tree.insert("", "end", values=row)
+        # selectQuery = CommonDML().fetchNotSoldProductsByACompany(self.selected_company_id)
+        # self.cursor.execute(selectQuery)
+        self.cursor.callproc('FetchNotSoldProductsByACompany', [self.selected_company_id])
+        
+        for results in self.cursor.stored_results():
+            rows = results.fetchall()
+            # Add fetched data to the table on the screen
+            for row in rows:
+                self.tree.insert("", "end", values=row)
 
     def add_item(self):
         # Get values from the entry fields
@@ -105,7 +107,18 @@ class AddProduct:
             max_id_result = self.cursor.fetchone()[0]
             newProductID = (max_id_result + 1) if max_id_result else 1
 
-            self.cursor.execute(ProductDML.insertNewProduct(newProductID, product_price, quantity, self.selected_company_id, item_name, brand_id))
+            # self.cursor.execute(ProductDML.insertNewProduct(newProductID, product_price, quantity, self.selected_company_id, item_name, brand_id))
+            self.cursor.callproc(
+                'InsertNewProduct',
+                [
+                    newProductID,
+                    product_price,
+                    quantity,
+                    self.selected_company_id,
+                    item_name,
+                    brand_id
+                ]
+            )
             self.connection.commit()
 
             # Refresh the table after successful insertion

@@ -91,8 +91,29 @@ class AddEmployee:
             tk.messagebox.showerror("Error", "Postal code must be all numbers and maximum 5 characters.")
             return
         
-        insertEmployeeQuery = EmployeeDML.insertNewEmployee(employee_data['Employee Username'], employee_data['Employee Password'], newEmployeeID, employee_data['Employee First Name'], employee_data['Employee Last Name'], employee_data['Employee Email'], employee_data['Employee Phone No'], employee_data['Employee Hire Date'], employee_data['Employee Street Name'], employee_data['Employee Street No'], employee_data['Employee City'], employee_data['Employee State'], employee_data['Employee Postal Code'], employee_data['Employee Country'], self.selected_company_id, employee_data['Is Admin'])
-        self.cursor.execute(insertEmployeeQuery)
+        # insertEmployeeQuery = EmployeeDML.insertNewEmployee(employee_data['Employee Username'], employee_data['Employee Password'], newEmployeeID, employee_data['Employee First Name'], employee_data['Employee Last Name'], employee_data['Employee Email'], employee_data['Employee Phone No'], employee_data['Employee Hire Date'], employee_data['Employee Street Name'], employee_data['Employee Street No'], employee_data['Employee City'], employee_data['Employee State'], employee_data['Employee Postal Code'], employee_data['Employee Country'], self.selected_company_id, employee_data['Is Admin'])
+        # self.cursor.execute(insertEmployeeQuery)
+        self.cursor.callproc(
+            'InsertNewEmployee',
+            [
+                employee_data['Employee Username'],
+                employee_data['Employee Password'],
+                newEmployeeID,
+                employee_data['Employee First Name'],
+                employee_data['Employee Last Name'],
+                employee_data['Employee Email'],
+                employee_data['Employee Phone No'],
+                employee_data['Employee Hire Date'],
+                employee_data['Employee Street Name'],
+                employee_data['Employee Street No'],
+                employee_data['Employee City'],
+                employee_data['Employee State'],
+                employee_data['Employee Postal Code'],
+                employee_data['Employee Country'],
+                self.selected_company_id,
+                employee_data['Is Admin']
+            ]
+        )
         self.connection.commit()
 
     def go_back(self):
