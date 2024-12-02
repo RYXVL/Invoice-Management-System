@@ -115,6 +115,10 @@ class AddEmployee:
             ]
         )
         self.connection.commit()
+        # Clear all input fields after commit
+        for entry in self.entries.values():
+            entry.delete(0, tk.END)
+        tk.messagebox.showinfo("Success", "New employee has been created successfully!")
 
     def go_back(self):
         """Go back to the previous screen."""
