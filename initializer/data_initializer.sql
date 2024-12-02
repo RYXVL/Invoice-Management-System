@@ -130,3 +130,316 @@ VALUES
 (3, 299.99, 10, 5, 'Vacuum Bot', 6),
 (4, 29.99, 100, 5, 'Electric Toothbrush', 5),
 (5, 89.99, 70, 5, 'Cordless Drill', 8);
+
+-- Stored Procedures
+DELIMITER //
+CREATE PROCEDURE FetchNotSoldProductsByACompany(IN company_id INT)
+BEGIN
+    SELECT pc.*, b.brand_name
+    FROM product_catalog pc
+    LEFT JOIN product p
+    ON pc.item_name = p.item_name 
+    AND pc.brand_id = p.brand_id 
+    AND p.company_id = company_id
+    JOIN brand b 
+    ON pc.brand_id = b.brand_id
+    WHERE p.company_id IS NULL;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE GetInvoicesOfACustomerOfACompany(IN company_id INT, IN customer_id INT)
+BEGIN
+    SELECT DISTINCT i.invoice_id, i.invoice_date
+    FROM invoice i
+    JOIN processes p
+    ON i.invoice_id = p.invoice_id
+    WHERE p.customer_id = customer_id 
+    AND p.company_id = company_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE UpdateAllFieldsOfACompany(
+    IN p_company_id INT,
+    IN p_company_name VARCHAR(255),
+    IN p_company_street_name VARCHAR(255),
+    IN p_company_street_no VARCHAR(50),
+    IN p_company_city VARCHAR(100),
+    IN p_company_state VARCHAR(100),
+    IN p_company_postal_code VARCHAR(20),
+    IN p_company_country VARCHAR(100),
+    IN p_company_email VARCHAR(255),
+    IN p_company_phone_no VARCHAR(50)
+)
+BEGIN
+    UPDATE Company 
+    SET 
+        company_name = p_company_name, 
+        company_street_name = p_company_street_name, 
+        company_street_no = p_company_street_no, 
+        company_city = p_company_city, 
+        company_state = p_company_state, 
+        company_postal_code = p_company_postal_code, 
+        company_country = p_company_country, 
+        company_email = p_company_email, 
+        company_phone_no = p_company_phone_no
+    WHERE company_id = p_company_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE InsertCustomer(
+    IN p_customer_user_name VARCHAR(255),
+    IN p_customer_password VARCHAR(255),
+    IN p_customer_id INT,
+    IN p_customer_first_name VARCHAR(255),
+    IN p_customer_last_name VARCHAR(255),
+    IN p_customer_email VARCHAR(255),
+    IN p_customer_phone_no VARCHAR(50),
+    IN p_customer_street_name VARCHAR(255),
+    IN p_customer_street_no INT,
+    IN p_customer_city VARCHAR(100),
+    IN p_customer_state VARCHAR(100),
+    IN p_customer_postal_code VARCHAR(20),
+    IN p_customer_country VARCHAR(100),
+    IN p_company_id INT
+)
+BEGIN
+    INSERT INTO Customer (
+        customer_user_name, 
+        customer_password, 
+        customer_id, 
+        customer_first_name, 
+        customer_last_name, 
+        customer_email, 
+        customer_phone_no, 
+        customer_street_name, 
+        customer_street_no, 
+        customer_city, 
+        customer_state, 
+        customer_postal_code, 
+        customer_country, 
+        company_id
+    ) 
+    VALUES (
+        p_customer_user_name, 
+        p_customer_password, 
+        p_customer_id, 
+        p_customer_first_name, 
+        p_customer_last_name, 
+        p_customer_email, 
+        p_customer_phone_no, 
+        p_customer_street_name, 
+        p_customer_street_no, 
+        p_customer_city, 
+        p_customer_state, 
+        p_customer_postal_code, 
+        p_customer_country, 
+        p_company_id
+    );
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE UpdateAllFieldsOfACustomer(
+    IN p_company_id INT,
+    IN p_customer_id INT,
+    IN p_customer_user_name VARCHAR(255),
+    IN p_customer_first_name VARCHAR(255),
+    IN p_customer_last_name VARCHAR(255),
+    IN p_customer_email VARCHAR(255),
+    IN p_customer_phone_no VARCHAR(50),
+    IN p_customer_street_name VARCHAR(255),
+    IN p_customer_street_no INT,
+    IN p_customer_city VARCHAR(100),
+    IN p_customer_state VARCHAR(100),
+    IN p_customer_postal_code VARCHAR(20),
+    IN p_customer_country VARCHAR(100)
+)
+BEGIN
+    UPDATE Customer 
+    SET 
+        customer_user_name = p_customer_user_name, 
+        customer_first_name = p_customer_first_name, 
+        customer_last_name = p_customer_last_name, 
+        customer_email = p_customer_email, 
+        customer_phone_no = p_customer_phone_no, 
+        customer_street_name = p_customer_street_name, 
+        customer_street_no = p_customer_street_no, 
+        customer_city = p_customer_city, 
+        customer_state = p_customer_state, 
+        customer_postal_code = p_customer_postal_code, 
+        customer_country = p_customer_country
+    WHERE 
+        customer_id = p_customer_id 
+        AND company_id = p_company_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE InsertNewEmployee(
+    IN p_employee_username VARCHAR(255),
+    IN p_employee_password VARCHAR(255),
+    IN p_employee_id INT,
+    IN p_employee_first_name VARCHAR(255),
+    IN p_employee_last_name VARCHAR(255),
+    IN p_employee_email VARCHAR(255),
+    IN p_employee_phone_no VARCHAR(50),
+    IN p_employee_hire_date DATE,
+    IN p_employee_street_name VARCHAR(255),
+    IN p_employee_street_no INT,
+    IN p_employee_city VARCHAR(100),
+    IN p_employee_state VARCHAR(100),
+    IN p_employee_postal_code VARCHAR(20),
+    IN p_employee_country VARCHAR(100),
+    IN p_company_id INT,
+    IN p_is_admin BOOLEAN
+)
+BEGIN
+    INSERT INTO Employee (
+        employee_user_name, 
+        employee_password, 
+        employee_id, 
+        employee_first_name, 
+        employee_last_name, 
+        employee_email, 
+        employee_phone_no, 
+        employee_hire_date, 
+        employee_street_name, 
+        employee_street_no, 
+        employee_city, 
+        employee_state, 
+        employee_postal_code, 
+        employee_country, 
+        company_id, 
+        is_admin
+    ) 
+    VALUES (
+        p_employee_username, 
+        p_employee_password, 
+        p_employee_id, 
+        p_employee_first_name, 
+        p_employee_last_name, 
+        p_employee_email, 
+        p_employee_phone_no, 
+        p_employee_hire_date, 
+        p_employee_street_name, 
+        p_employee_street_no, 
+        p_employee_city, 
+        p_employee_state, 
+        p_employee_postal_code, 
+        p_employee_country, 
+        p_company_id, 
+        p_is_admin
+    );
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE UpdateAllFieldsOfAnEmployee(
+    IN p_company_id INT,
+    IN p_employee_id INT,
+    IN p_employee_user_name VARCHAR(255),
+    IN p_employee_password VARCHAR(255),
+    IN p_employee_first_name VARCHAR(255),
+    IN p_employee_last_name VARCHAR(255),
+    IN p_employee_email VARCHAR(255),
+    IN p_employee_phone_no VARCHAR(50),
+    IN p_employee_street_name VARCHAR(255),
+    IN p_employee_street_no INT,
+    IN p_employee_city VARCHAR(100),
+    IN p_employee_state VARCHAR(100),
+    IN p_employee_postal_code VARCHAR(20),
+    IN p_employee_country VARCHAR(100),
+    IN p_is_admin BOOLEAN,
+    IN p_employee_hire_date DATE
+)
+BEGIN
+    UPDATE Employee 
+    SET 
+        employee_user_name = p_employee_user_name, 
+        employee_password = p_employee_password, 
+        employee_first_name = p_employee_first_name, 
+        employee_last_name = p_employee_last_name, 
+        employee_email = p_employee_email, 
+        employee_phone_no = p_employee_phone_no, 
+        employee_street_name = p_employee_street_name, 
+        employee_street_no = p_employee_street_no, 
+        employee_city = p_employee_city, 
+        employee_state = p_employee_state, 
+        employee_postal_code = p_employee_postal_code, 
+        employee_country = p_employee_country, 
+        is_admin = p_is_admin, 
+        employee_hire_date = p_employee_hire_date
+    WHERE 
+        employee_id = p_employee_id 
+        AND company_id = p_company_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE InsertNewProcess(
+    IN p_company_id INT,
+    IN p_customer_id INT,
+    IN p_employee_id INT,
+    IN p_invoice_id INT
+)
+BEGIN
+    INSERT INTO Processes (
+        company_id, 
+        customer_id, 
+        employee_id, 
+        invoice_id
+    ) 
+    VALUES (
+        p_company_id, 
+        p_customer_id, 
+        p_employee_id, 
+        p_invoice_id
+    );
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE InsertNewProduct(
+    IN p_newProductID INT,
+    IN p_product_price DECIMAL(10,2),
+    IN p_quantity INT,
+    IN p_selected_company_id INT,
+    IN p_item_name VARCHAR(255),
+    IN p_brand_id INT
+)
+BEGIN
+    INSERT INTO Product (
+        product_id, 
+        product_price, 
+        product_quantity, 
+        company_id, 
+        item_name, 
+        brand_id
+    ) 
+    VALUES (
+        p_newProductID, 
+        p_product_price, 
+        p_quantity, 
+        p_selected_company_id, 
+        p_item_name, 
+        p_brand_id
+    );
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE UpdateProductQuantityOfACompany(
+    IN p_company_id INT,
+    IN p_product_id INT,
+    IN p_new_quantity INT
+)
+BEGIN
+    UPDATE Product 
+    SET product_quantity = p_new_quantity
+    WHERE product_id = p_product_id 
+    AND company_id = p_company_id;
+END //
+DELIMITER ;
