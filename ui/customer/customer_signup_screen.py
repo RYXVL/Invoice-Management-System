@@ -142,10 +142,6 @@ class CustomerSignupScreen:
         customer_id = (max_id_result + 1) if max_id_result else 1
 
         # Insert into database
-        # queryToExecute = CustomerDML.insertCustomer(username, password, customer_id, first_name, last_name, email, phone_no, street_name,
-        #      street_no, city, state, postal_code, country, company_id)
-        
-        # self.cursor.execute(queryToExecute)
         self.cursor.callproc(
             'InsertCustomer', 
             [

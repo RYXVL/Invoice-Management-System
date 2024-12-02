@@ -44,11 +44,6 @@ class CustomerMainScreen:
         self.invoice_table.bind("<<TreeviewSelect>>", self.on_row_select)
 
     def populate_table(self):
-        # query = CommonDML.getInvoicesOfACustomerOfACompany(self.selected_company, self.customer_id)
-        # self.cursor.execute(query)
-        
-        # self.cursor.callproc('GetInvoicesOfACustomerOfACompany', self.selected_company, self.customer_id)
-        # rows = self.cursor.fetchall()
         self.cursor.callproc('GetInvoicesOfACustomerOfACompany', (self.selected_company, self.customer_id))
         for results in self.cursor.stored_results():
             rows = results.fetchall()

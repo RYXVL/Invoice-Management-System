@@ -175,7 +175,6 @@ class GenerateInvoice:
 
             # Update the product quantity in the database and the product table
             new_quantity = remaining_quantity - quantity
-            # self.cursor.execute(ProductDML.updateProductQuantityOfACompany(self.selected_company_id, product_id, new_quantity))
             self.cursor.callproc(
                 'UpdateProductQuantityOfACompany',
                 [
@@ -207,7 +206,6 @@ class GenerateInvoice:
         if product_id:
             self.cursor.execute(ProductDML.getQuantityOfAProductOfACompany(self.selected_company_id, product_id))
             old_qty = self.cursor.fetchone()[0]
-            # self.cursor.execute(ProductDML.updateProductQuantityOfACompany(self.selected_company_id, product_id, int(old_qty) + int(quantity_bought)))
             self.cursor.callproc(
                 'UpdateProductQuantityOfACompany',
                 [
@@ -250,8 +248,6 @@ class GenerateInvoice:
             self.cursor.execute(queryInsertIntoInvoiceLineItems)
             self.connection.commit()
 
-        # queryInsertIntoProcesses = ProcessDML.insertNewProcess(self.selected_company_id, customer_id, self.employee_id, newInvoiceID)
-        # self.cursor.execute(queryInsertIntoProcesses)
         self.cursor.callproc(
             'InsertNewProcess',
             [

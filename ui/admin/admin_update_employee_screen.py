@@ -141,26 +141,6 @@ class UpdateEmployee:
             tk.messagebox.showerror("Error", "Hire date must be in the format yyyy-mm-dd.")
             return
 
-        # update_query = EmployeeDML.updateAllFieldsOfAnEmployee(
-        #     self.selected_company_id,
-        #     details["Employee ID"],
-        #     details["Username"],
-        #     details["Password"],
-        #     details["First Name"],
-        #     details["Last Name"],
-        #     details["Email"],
-        #     details["Phone No"],
-        #     details["Street Name"],
-        #     details["Street No"],
-        #     details["City"],
-        #     details["State"],
-        #     details["Postal Code"],
-        #     details["Country"],
-        #     is_admin,
-        #     details["Hire Date"]
-        # )
-
-        # self.cursor.execute(update_query)
         self.cursor.callproc(
             'UpdateAllFieldsOfAnEmployee',
             [
