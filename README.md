@@ -13,3 +13,23 @@ pip install mysql-connector-python
 ```bash
 python main.py
 ```
+
+
+# NOTE
+- An admin can only perform operations on data of company to which they belong to.
+- An employee can only generate invoice for the customers who belong to their own company.
+
+- To login into different roles, you can use the following credentials or any existing ones from the **Employee** or **Customer** table after the dump file has been run once and the database has been initialized on the local server.
+Sample credentials (All the following credentials are for the company "Alpha Dynamics" that has company id as 1): -
+
+1. ADMIN
+Username: admin1
+Password: pass1234
+
+2. EMPLOYEE
+Username: user1
+Password: userpass1
+
+3. CUSTOMER
+Username: cust1
+Password: custpass1
