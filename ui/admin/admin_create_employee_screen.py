@@ -22,7 +22,7 @@ class AddEmployee:
         # Define the labels and keys for fields
         fields = [
             "Employee Username", "Employee Password", "Employee First Name", "Employee Last Name", 
-            "Employee Email", "Employee Phone No", "Employee Hire Date", "Employee Street Name", 
+            "Employee Email", "Employee Phone No", "Employee Hire Date (YYYY-MM-DD)", "Employee Street Name", 
             "Employee Street No", "Employee City", "Employee State", "Employee Postal Code", 
             "Employee Country"
         ]
@@ -79,7 +79,7 @@ class AddEmployee:
             tk.messagebox.showerror("Error", "Phone number must be all numbers and maximum 10 characters.")
             return
 
-        if not re.match(r"^\d{4}-\d{2}-\d{2}$", employee_data['Employee Hire Date']):
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", employee_data['Employee Hire Date (YYYY-MM-DD)']):
             tk.messagebox.showerror("Error", "Hire date must be in the format yyyy-mm-dd.")
             return
 
@@ -101,7 +101,7 @@ class AddEmployee:
                 employee_data['Employee Last Name'],
                 employee_data['Employee Email'],
                 employee_data['Employee Phone No'],
-                employee_data['Employee Hire Date'],
+                employee_data['Employee Hire Date (YYYY-MM-DD)'],
                 employee_data['Employee Street Name'],
                 employee_data['Employee Street No'],
                 employee_data['Employee City'],

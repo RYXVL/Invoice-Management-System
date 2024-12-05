@@ -25,7 +25,7 @@ class UpdateEmployee:
         # Labels and Entries for employee details in two columns
         labels = [
             "Employee ID", "Username", "Password", "First Name",
-            "Last Name", "Email", "Phone No", "Hire Date", "Street Name",
+            "Last Name", "Email", "Phone No", "Hire Date (YYYY-MM-DD)", "Street Name",
             "Street No", "City", "State", "Postal Code", "Country"
         ]
 
@@ -137,7 +137,7 @@ class UpdateEmployee:
             tk.messagebox.showerror("Error", "Phone No should be a number with a maximum length of 10!")
             return
         
-        if not re.match(r"^\d{4}-\d{2}-\d{2}$", details['Hire Date']):
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", details['Hire Date (YYYY-MM-DD)']):
             tk.messagebox.showerror("Error", "Hire date must be in the format yyyy-mm-dd.")
             return
 
@@ -159,7 +159,7 @@ class UpdateEmployee:
                 details["Postal Code"],
                 details["Country"],
                 is_admin,
-                details["Hire Date"]
+                details["Hire Date (YYYY-MM-DD)"]
             ]
         )
         self.connection.commit()
